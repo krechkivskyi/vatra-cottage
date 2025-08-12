@@ -5,14 +5,12 @@
 ## Структура
 ```
 /images
-style.css
-script.js
-    hero.jpg, cottage1.jpg, cottage2.jpg, cottage3.jpg, gallery1..6.jpg
-  /js
-    script.js
-favicon.svg
-index.html
-robots.txt
+    hero.jpg, cottage1.jpg, cottage2.jpg, cottage3.jpg, gallery1.jpg…gallery6.jpg — зображення сайту
+style.css      — стилі оформлення
+script.js      — логіка меню, плавного скролу та галереї
+favicon.svg    — значок сайту
+index.html     — головна сторінка
+robots.txt     — правила для пошукових роботів
 ```
 
 ## Що замінити
