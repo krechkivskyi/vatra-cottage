@@ -7,7 +7,12 @@ document.addEventListener('DOMContentLoaded', () => {
 // Мобільне меню
 const menuBtn = document.getElementById('menuBtn');
 const menu = document.getElementById('menu');
-menuBtn?.addEventListener('click', () => menu.classList.toggle('open'));
+menuBtn?.addEventListener('click', () => {
+  if (!menu || !menuBtn) return;
+  menu.classList.toggle('open');
+  const newState = menu.classList.contains('open');
+  menuBtn.setAttribute('aria-expanded', String(newState));
+});
 
 // Плавний скрол до секцій
 document.querySelectorAll('a[href^="#"]').forEach(a => {
