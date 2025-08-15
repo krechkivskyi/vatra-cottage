@@ -76,7 +76,18 @@
         <div class="grid">
           <!-- Card 1 -->
           <article class="card">
-            <img src="images/cottage1/cottage1-1.jpg" alt="Котедж Дерев'яний з каміном" loading="lazy" />
+            <div class="card-gallery">
+              <button class="prev" aria-label="Попереднє фото">‹</button>
+              <button class="next" aria-label="Наступне фото">›</button>
+              <img src="images/cottage1/cottage1-1.jpg" alt="Котедж #1 фото 1" loading="lazy" class="active" />
+              <img src="images/cottage1/cottage1-2.jpg" alt="Котедж #1 фото 2" loading="lazy" />
+              <img src="images/cottage1/cottage1-3.jpg" alt="Котедж #1 фото 3" loading="lazy" />
+              <img src="images/cottage1/cottage1-4.jpg" alt="Котедж #1 фото 4" loading="lazy" />
+              <img src="images/cottage1/cottage1-5.jpg" alt="Котедж #1 фото 5" loading="lazy" />
+              <img src="images/cottage1/cottage1-6.jpg" alt="Котедж #1 фото 6" loading="lazy" />
+              <img src="images/cottage1/cottage1-7.jpg" alt="Котедж #1 фото 7" loading="lazy" />
+              <img src="images/cottage1/cottage1-8.jpg" alt="Котедж #1 фото 8" loading="lazy" />
+            </div>
             <div class="card-body">
               <div class="badge">до 6 гостей</div>
               <h3>Котедж #1</h3>
@@ -90,7 +101,18 @@
           </article>
           <!-- Card 2 -->
           <article class="card">
-            <img src="images/cottage2/cottage2-1.jpg" alt="Котедж #2 у горах" loading="lazy" />
+            <div class="card-gallery">
+              <button class="prev" aria-label="Попереднє фото">‹</button>
+              <button class="next" aria-label="Наступне фото">›</button>
+              <img src="images/cottage2/cottage2-1.jpg" alt="Котедж #2 фото 1" loading="lazy" class="active" />
+              <img src="images/cottage2/cottage2-2.jpg" alt="Котедж #2 фото 2" loading="lazy" />
+              <img src="images/cottage2/cottage2-3.jpg" alt="Котедж #2 фото 3" loading="lazy" />
+              <img src="images/cottage2/cottage2-4.jpg" alt="Котедж #2 фото 4" loading="lazy" />
+              <img src="images/cottage2/cottage2-5.jpg" alt="Котедж #2 фото 5" loading="lazy" />
+              <img src="images/cottage2/cottage2-6.jpg" alt="Котедж #2 фото 6" loading="lazy" />
+              <img src="images/cottage2/cottage2-7.jpg" alt="Котедж #2 фото 7" loading="lazy" />
+              <img src="images/cottage2/cottage2-8.jpg" alt="Котедж #2 фото 8" loading="lazy" />
+            </div>
             <div class="card-body">
               <div class="badge">до 4 гостей</div>
               <h3>Котедж #2</h3>
@@ -124,7 +146,9 @@
       </div>
       <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Перегляд фото">
         <button class="close" id="lightboxClose" aria-label="Закрити">Закрити ✕</button>
+        <button class="prev" id="lightboxPrev" aria-label="Попереднє фото">‹</button>
         <img id="lightboxImg" alt="Збільшене зображення" />
+        <button class="next" id="lightboxNext" aria-label="Наступне фото">›</button>
       </div>
     </section>
 

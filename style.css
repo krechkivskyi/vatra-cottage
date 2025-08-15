@@ -50,9 +50,14 @@ section { padding: 64px 0; }
 .muted { color: var(--muted); }
 
 /* Cottages grid */
-.grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 20px; }
-.card { grid-column: span 4; background: var(--card); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); display: flex; flex-direction: column; }
-.card img { width: 100%; height: 220px; object-fit: cover; }
+.grid { display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
+.card { background: var(--card); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); display: flex; flex-direction: column; }
+.card-gallery { position: relative; }
+.card-gallery img { width: 100%; height: 220px; object-fit: cover; display: none; }
+.card-gallery img.active { display: block; }
+.card-gallery button { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,.8); border: none; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-weight: 700; }
+.card-gallery button.prev { left: 8px; }
+.card-gallery button.next { right: 8px; }
 .card-body { padding: 16px; display: grid; gap: 10px; }
 .badge { display: inline-block; padding: 6px 10px; border-radius: 999px; background: #f0f6f2; color: var(--brand); font-weight: 700; font-size: 12px; }
 .features { display: flex; flex-wrap: wrap; gap: 10px; color: var(--muted); font-size: 14px; }
@@ -68,6 +73,10 @@ section { padding: 64px 0; }
 .lightbox.open { display: flex; }
 .lightbox img { max-width: 96vw; max-height: 85vh; border-radius: 12px; box-shadow: 0 20px 60px rgba(0,0,0,.4); }
 .lightbox .close { position: absolute; top: 20px; right: 20px; background: white; border: none; border-radius: 8px; padding: 10px 14px; font-weight: 700; cursor: pointer; }
+.lightbox .prev,
+.lightbox .next { position: absolute; top: 50%; transform: translateY(-50%); background: white; border: none; width: 44px; height: 44px; border-radius: 50%; cursor: pointer; font-size: 24px; font-weight: 700; display: none; }
+.lightbox .prev { left: 20px; }
+.lightbox .next { right: 20px; }
 
 /* Contacts */
 .contacts { display: grid; grid-template-columns: 1.1fr .9fr; gap: 20px; }
@@ -86,12 +95,10 @@ footer { padding: 40px 0; color: var(--muted); text-align: center; }
 @media (max-width: 960px){
   .hero-wrap { grid-template-columns: 1fr; }
   .contacts { grid-template-columns: 1fr; }
-  .card { grid-column: span 6; }
 }
 @media (max-width: 640px){
   .menu { display: none; position: absolute; top: 64px; left: 0; right: 0; background: white; border-bottom: 1px solid #e7efe9; padding: 10px 20px 16px; flex-direction: column; gap: 12px; }
   .menu.open { display: flex; }
   .hamburger { display: inline-flex; }
-  .card { grid-column: span 12; }
   section { padding: 48px 0; }
 }
