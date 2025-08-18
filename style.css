@@ -113,14 +113,15 @@ section { padding: 64px 0; }
 .review-summary { text-align: center; margin-bottom: 30px; display: grid; gap: 12px; }
 .review-summary .source-ratings { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
 .review-summary .source-rating { display: flex; align-items: center; gap: 6px; font-weight: 600; }
-.review-summary .source-icon { width: 24px; height: 24px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; color: white; font-weight: 700; }
-.source-icon.google { background: #4285f4; }
-.source-icon.booking { background: #003580; }
+.review-summary .source-icon,
+.review-card .source-icon { width: 24px; height: 24px; border-radius: 50%; }
 .review-summary .overall { display: flex; align-items: center; gap: 8px; justify-content: center; font-weight: 700; }
-.review-grid { display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
-.review-card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 18px; display: grid; gap: 10px; }
+.review-grid { display: flex; gap: 20px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; scroll-behavior: smooth; }
+.review-grid::-webkit-scrollbar { display: none; }
+.review-card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 18px; display: grid; gap: 10px; flex: 0 0 260px; scroll-snap-align: start; }
 .review-card .review-header { display: flex; align-items: center; gap: 10px; }
 .review-card .author { font-weight: 700; }
+.review-card .date { font-size: 0.85em; color: var(--muted); }
 .review-card p { margin: 0; }
 .stars { color: #f5a623; letter-spacing: 1px; }
 
