@@ -101,17 +101,20 @@ document.querySelectorAll('.card-gallery').forEach(gal => {
 
 // Відгуки гостей
 const reviews = [
-  { source: 'google', author: 'Іван', rating: 5, text: 'Чудовий відпочинок! Чисто і затишно.' },
-  { source: 'booking', author: 'Марія', rating: 4, text: 'Сподобалося місце, є все необхідне.' },
-  { source: 'booking', author: 'Марія', rating: 4, text: 'Сподобалося місце, є все необхідне.' },
-  { source: 'booking', author: 'Марія', rating: 4, text: 'Сподобалося місце, є все необхідне.' },
-  { source: 'booking', author: 'Марія', rating: 4, text: 'Сподобалося місце, є все необхідне.' },
-  { source: 'google', author: 'Анна', rating: 5, text: 'Прекрасний сервіс і краєвиди.' }
+  { source: 'google', author: 'Іван', date: '2024-04-03', rating: 5, text: 'Чудовий відпочинок! Чисто і затишно.' },
+  { source: 'booking', author: 'Марія', date: '2024-04-10', rating: 4, text: 'Сподобалося місце, є все необхідне.' },
+  { source: 'booking', author: 'Олег', date: '2024-05-05', rating: 5, text: 'Дуже гостинні господарі та гарна природа.' },
+  { source: 'booking', author: 'Наталія', date: '2024-05-20', rating: 4, text: 'Комфортно та затишно. Рекомендую.' },
+  { source: 'google', author: 'Анна', date: '2024-06-15', rating: 5, text: 'Прекрасний сервіс і краєвиди.' }
 ];
 
 function renderStars(r){
   const full = Math.round(r);
   return '★'.repeat(full) + '☆'.repeat(5 - full);
+}
+
+function formatDate(str){
+  return new Date(str).toLocaleDateString('uk-UA', { day: 'numeric', month: 'short', year: 'numeric' });
 }
 
 function renderReviews(){
@@ -129,12 +132,13 @@ function renderReviews(){
 
     const card = document.createElement('article');
     card.className = 'review-card';
-    const letter = r.source === 'google' ? 'G' : 'B';
+    const icon = r.source === 'google' ? 'images/Google_Icon_2025.svg' : 'images/Booking.com_Icon_2022.svg';
     card.innerHTML = `
       <div class="review-header">
-        <span class="source-icon ${r.source}" aria-label="${r.source}">${letter}</span>
+        <img class="source-icon" src="${icon}" alt="${r.source}" />
         <div>
           <div class="author">${r.author}</div>
+          <div class="date">(${formatDate(r.date)})</div>
           <div class="stars" aria-label="Рейтинг: ${r.rating} з 5">${renderStars(r.rating)}</div>
         </div>
       </div>
@@ -143,12 +147,30 @@ function renderReviews(){
     list.appendChild(card);
   });
 
+  if(list.children.length){
+    const first = list.firstElementChild.cloneNode(true);
+    const last = list.lastElementChild.cloneNode(true);
+    list.appendChild(first);
+    list.insertBefore(last, list.firstElementChild);
+
+    const cardWidth = list.firstElementChild.offsetWidth;
+    list.scrollLeft = cardWidth;
+
+    list.addEventListener('scroll', () => {
+      if (list.scrollLeft <= 0) {
+        list.scrollLeft = list.scrollWidth - cardWidth * 2;
+      } else if (list.scrollLeft >= list.scrollWidth - list.clientWidth) {
+        list.scrollLeft = cardWidth;
+      }
+    });
+  }
+
   const overall = (total / reviews.length).toFixed(1);
   const sourcesHtml = Object.keys(stats).map(src => {
     const avg = (stats[src].sum / stats[src].count).toFixed(1);
     const label = src === 'google' ? 'Google' : 'Booking.com';
-    const letter = src === 'google' ? 'G' : 'B';
-    return `<div class="source-rating"><span class="source-icon ${src}" aria-hidden="true">${letter}</span>${label} ${avg}</div>`;
+    const icon = src === 'google' ? 'images/Google_Icon_2025.svg' : 'images/Booking.com_Icon_2022.svg';
+    return `<div class="source-rating"><img class="source-icon" src="${icon}" alt="${label}" />${label} ${avg}</div>`;
   }).join('');
   summary.innerHTML = `
     <div class="source-ratings">${sourcesHtml}</div>
