@@ -99,4 +99,60 @@ document.querySelectorAll('.card-gallery').forEach(gal => {
   show(0);
 });
 
+// Відгуки гостей
+const reviews = [
+  { source: 'google', author: 'Іван', rating: 5, text: 'Чудовий відпочинок! Чисто і затишно.' },
+  { source: 'booking', author: 'Марія', rating: 4, text: 'Сподобалося місце, є все необхідне.' },
+  { source: 'google', author: 'Анна', rating: 5, text: 'Прекрасний сервіс і краєвиди.' }
+];
+
+function renderStars(r){
+  const full = Math.round(r);
+  return '★'.repeat(full) + '☆'.repeat(5 - full);
+}
+
+function renderReviews(){
+  const list = document.getElementById('reviewsList');
+  const summary = document.getElementById('reviewSummary');
+  if(!list || !summary) return;
+  list.innerHTML = '';
+  let total = 0;
+  const stats = {};
+  reviews.forEach(r => {
+    total += r.rating;
+    stats[r.source] = stats[r.source] || {sum:0,count:0};
+    stats[r.source].sum += r.rating;
+    stats[r.source].count++;
+
+    const card = document.createElement('article');
+    card.className = 'review-card';
+    const letter = r.source === 'google' ? 'G' : 'B';
+    card.innerHTML = `
+      <div class="review-header">
+        <span class="source-icon ${r.source}" aria-label="${r.source}">${letter}</span>
+        <div>
+          <div class="author">${r.author}</div>
+          <div class="stars" aria-label="Рейтинг: ${r.rating} з 5">${renderStars(r.rating)}</div>
+        </div>
+      </div>
+      <p>${r.text}</p>
+    `;
+    list.appendChild(card);
+  });
+
+  const overall = (total / reviews.length).toFixed(1);
+  const sourcesHtml = Object.keys(stats).map(src => {
+    const avg = (stats[src].sum / stats[src].count).toFixed(1);
+    const label = src === 'google' ? 'Google' : 'Booking.com';
+    const letter = src === 'google' ? 'G' : 'B';
+    return `<div class="source-rating"><span class="source-icon ${src}" aria-hidden="true">${letter}</span>${label} ${avg}</div>`;
+  }).join('');
+  summary.innerHTML = `
+    <div class="source-ratings">${sourcesHtml}</div>
+    <div class="overall">Загальний рейтинг <strong>${overall}</strong> <span class="stars">${renderStars(overall)}</span></div>
+  `;
+}
+
+document.addEventListener('DOMContentLoaded', renderReviews);
+
 // Хелпер для Viber/Telegram (за потреби)
