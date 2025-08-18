@@ -103,6 +103,9 @@ document.querySelectorAll('.card-gallery').forEach(gal => {
 const reviews = [
   { source: 'google', author: 'Іван', rating: 5, text: 'Чудовий відпочинок! Чисто і затишно.' },
   { source: 'booking', author: 'Марія', rating: 4, text: 'Сподобалося місце, є все необхідне.' },
+  { source: 'booking', author: 'Марія', rating: 4, text: 'Сподобалося місце, є все необхідне.' },
+  { source: 'booking', author: 'Марія', rating: 4, text: 'Сподобалося місце, є все необхідне.' },
+  { source: 'booking', author: 'Марія', rating: 4, text: 'Сподобалося місце, є все необхідне.' },
   { source: 'google', author: 'Анна', rating: 5, text: 'Прекрасний сервіс і краєвиди.' }
 ];
 
