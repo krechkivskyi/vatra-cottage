@@ -12,7 +12,13 @@
 }
 * { box-sizing: border-box; }
 html, body { height: 100%; }
-body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, 'Helvetica Neue', Arial, sans-serif; color: var(--text); background: var(--bg); }
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, 'Helvetica Neue', Arial, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+  padding-top: 64px;
+}
 a { color: var(--brand); text-decoration: none; }
 a:hover { text-decoration: underline; }
 
@@ -20,7 +26,11 @@ a:hover { text-decoration: underline; }
 
 /* Header */
 header {
-  position: sticky; top: 0; z-index: 50;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
   background: rgba(255,255,255,.8);
   backdrop-filter: blur(8px);
   border-bottom: 1px solid #e2ddd5;
@@ -53,7 +63,11 @@ section { padding: 64px 0; }
 .grid { display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
 .card { background: var(--card); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); display: flex; flex-direction: column; }
 .card-gallery { position: relative; }
-.card-gallery img { width: 100%; height: 220px; object-fit: cover; display: none; }
+.card-gallery img {
+  width: 100%;
+  height: auto;
+  display: none;
+}
 .card-gallery img.active { display: block; }
 .card-gallery button { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,.8); border: none; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-weight: 700; }
 .card-gallery button.prev { left: 8px; }
@@ -69,7 +83,16 @@ section { padding: 64px 0; }
 .masonry img { width: 100%; margin: 0 0 16px; border-radius: 12px; box-shadow: var(--shadow); cursor: zoom-in; }
 
 /* Lightbox */
-.lightbox { position: fixed; inset: 0; background: rgba(0,0,0,.8); display: none; align-items: center; justify-content: center; padding: 24px; }
+.lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.8);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  z-index: 1000;
+}
 .lightbox.open { display: flex; }
 .lightbox img { max-width: 96vw; max-height: 85vh; border-radius: 12px; box-shadow: 0 20px 60px rgba(0,0,0,.4); }
 .lightbox .close { position: absolute; top: 20px; right: 20px; background: white; border: none; border-radius: 8px; padding: 10px 14px; font-weight: 700; cursor: pointer; }
