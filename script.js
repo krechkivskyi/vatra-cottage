@@ -116,11 +116,13 @@ lightboxImg?.addEventListener('wheel', (e) => {
 
 lightboxImg?.addEventListener('pointerdown', (e) => {
   if(e.pointerType === 'mouse' && e.button !== 0) return;
+  e.preventDefault();
   dragStartX = e.clientX;
   dragStartY = e.clientY;
   isDragging = true;
   lightboxImg.setPointerCapture(e.pointerId);
 });
+lightboxImg?.addEventListener('dragstart', (e) => e.preventDefault());
 lightboxImg?.addEventListener('pointermove', (e) => {
   if(!isDragging) return;
   if(zoom > 1){
