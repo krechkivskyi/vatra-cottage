@@ -167,13 +167,14 @@ function renderReviews(){
 
     const total = cards.length;
     list.scrollLeft = cardWidth * visible;
+    const maxScroll = list.scrollWidth - list.clientWidth;
 
     list.addEventListener('scroll', () => {
       if (list.scrollLeft <= 0) {
         list.style.scrollBehavior = 'auto';
         list.scrollLeft = cardWidth * total;
         list.style.scrollBehavior = 'smooth';
-      } else if (list.scrollLeft >= cardWidth * (total + visible)) {
+      } else if (list.scrollLeft >= maxScroll) {
         list.style.scrollBehavior = 'auto';
         list.scrollLeft = cardWidth * visible;
         list.style.scrollBehavior = 'smooth';
