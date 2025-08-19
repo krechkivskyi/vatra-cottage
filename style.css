@@ -102,7 +102,7 @@ section { padding: 64px 0; }
   z-index: 1000;
 }
 .lightbox.open { display: flex; }
-.lightbox img { max-width: 96vw; max-height: 85vh; border-radius: 12px; box-shadow: 0 20px 60px rgba(0,0,0,.4); }
+.lightbox img { max-width: 96vw; max-height: 85vh; border-radius: 12px; box-shadow: 0 20px 60px rgba(0,0,0,.4); touch-action: none; cursor: grab; }
 .lightbox .close { position: absolute; top: 20px; right: 20px; background: white; border: none; border-radius: 8px; padding: 10px 14px; font-weight: 700; cursor: pointer; }
 .lightbox .prev,
 .lightbox .next { position: absolute; top: 50%; transform: translateY(-50%); background: white; border: none; width: 44px; height: 44px; border-radius: 50%; cursor: pointer; font-size: 24px; font-weight: 700; display: none; }
