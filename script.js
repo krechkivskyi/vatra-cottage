@@ -52,6 +52,9 @@ function updateZoom(){
   if(zoom === 1){
     offsetX = 0;
     offsetY = 0;
+    lightboxImg.style.transition = 'transform 0.3s ease';
+  } else {
+    lightboxImg.style.transition = 'none';
   }
   lightboxImg.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(${zoom})`;
   lightboxImg.style.cursor = zoom > 1 ? 'grab' : 'auto';
@@ -111,12 +114,12 @@ document.addEventListener('keydown', (e) => {
 });
 
 // Zoom & swipe controls for lightbox image
-lightboxImg?.addEventListener('wheel', (e) => {
+lightbox?.addEventListener('wheel', (e) => {
   e.preventDefault();
   const factor = e.deltaY < 0 ? 1.1 : 0.9;
   zoom = Math.min(Math.max(zoom * factor, 1), 5);
   updateZoom();
-});
+}, { passive: false });
 
 lightboxImg?.addEventListener('pointerdown', (e) => {
   if(e.pointerType === 'mouse' && e.button !== 0) return;
