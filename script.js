@@ -49,6 +49,10 @@ let pinchZoom = 1;
 
 function updateZoom(){
   if(!lightboxImg) return;
+  if(zoom === 1){
+    offsetX = 0;
+    offsetY = 0;
+  }
   lightboxImg.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(${zoom})`;
   lightboxImg.style.cursor = zoom > 1 ? 'grab' : 'auto';
 }
