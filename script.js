@@ -158,41 +158,29 @@ function renderReviews(){
     list.appendChild(first);
     list.insertBefore(last, list.firstElementChild);
 
-    const cardWidth = list.firstElementChild.offsetWidth;
+    const gap = parseInt(getComputedStyle(list).columnGap || getComputedStyle(list).gap) || 0;
+    const cardWidth = list.firstElementChild.offsetWidth + gap;
     list.scrollLeft = cardWidth;
 
     list.addEventListener('scroll', () => {
       if (list.scrollLeft <= 0) {
+        list.style.scrollBehavior = 'auto';
         list.scrollLeft = list.scrollWidth - cardWidth * 2;
+        list.style.scrollBehavior = 'smooth';
       } else if (list.scrollLeft >= list.scrollWidth - list.clientWidth) {
+        list.style.scrollBehavior = 'auto';
         list.scrollLeft = cardWidth;
+        list.style.scrollBehavior = 'smooth';
       }
     });
 
-    list.addEventListener('wheel', (e) => {
-      e.preventDefault();
-      list.scrollLeft += e.deltaY;
-    });
-
-    let isDown = false;
-    let startX = 0;
-    let scrollStart = 0;
-    list.addEventListener('mousedown', (e) => {
-      isDown = true;
-      startX = e.pageX;
-      scrollStart = list.scrollLeft;
-      list.classList.add('dragging');
-    });
-    ['mouseleave','mouseup'].forEach(evt => list.addEventListener(evt, () => {
-      isDown = false;
-      list.classList.remove('dragging');
-    }));
-    list.addEventListener('mousemove', (e) => {
-      if(!isDown) return;
-      e.preventDefault();
-      const walk = e.pageX - startX;
-      list.scrollLeft = scrollStart - walk;
-    });
+    const prev = document.getElementById('reviewsPrev');
+    const next = document.getElementById('reviewsNext');
+    const scrollByCard = (dir) => {
+      list.scrollBy({ left: cardWidth * dir, behavior: 'smooth' });
+    };
+    prev.addEventListener('click', () => scrollByCard(-1));
+    next.addEventListener('click', () => scrollByCard(1));
   }
 
   const stats = {};
