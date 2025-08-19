@@ -40,16 +40,34 @@ const lightboxNext = document.getElementById('lightboxNext');
 let lbImages = [];
 let lbIndex = 0;
 
+let zoom = 1;
+let offsetX = 0, offsetY = 0;
+let dragStartX = 0, dragStartY = 0;
+let isDragging = false;
+let pinchDist = 0;
+let pinchZoom = 1;
+
+function updateZoom(){
+  if(!lightboxImg) return;
+  lightboxImg.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(${zoom})`;
+  lightboxImg.style.cursor = zoom > 1 ? 'grab' : 'auto';
+}
+function resetZoom(){
+  zoom = 1; offsetX = 0; offsetY = 0; updateZoom();
+}
+
 function openLightbox(src, alt){
   if (!lightbox || !lightboxImg) return;
   lightboxImg.src = src; lightboxImg.alt = alt || 'Зображення';
   lightbox.classList.add('open');
+  resetZoom();
 }
 function closeLightbox(){
   if (!lightbox || !lightboxImg) return;
   lightbox.classList.remove('open');
   lightboxImg.src = '';
   lbImages = [];
+  resetZoom();
 }
 
 function openGallery(images, start=0){
@@ -71,7 +89,10 @@ function showNext(step){
 gallery?.addEventListener('click', (e) => {
   const t = e.target;
   if(t && t.tagName === 'IMG'){
-    openGallery([{src: t.src, alt: t.alt}], 0);
+    const imgs = Array.from(gallery.querySelectorAll('img'));
+    const arr = imgs.map(img => ({src: img.src, alt: img.alt}));
+    const idx = imgs.indexOf(t);
+    openGallery(arr, idx);
   }
 });
 lightboxPrev?.addEventListener('click', (e) => { e.stopPropagation(); showNext(-1); });
@@ -84,6 +105,64 @@ document.addEventListener('keydown', (e) => {
   if(e.key === 'ArrowRight') showNext(1);
   if(e.key === 'ArrowLeft') showNext(-1);
 });
+
+// Zoom & swipe controls for lightbox image
+lightboxImg?.addEventListener('wheel', (e) => {
+  e.preventDefault();
+  const factor = e.deltaY < 0 ? 1.1 : 0.9;
+  zoom = Math.min(Math.max(zoom * factor, 1), 5);
+  updateZoom();
+});
+
+lightboxImg?.addEventListener('pointerdown', (e) => {
+  if(e.pointerType === 'mouse' && e.button !== 0) return;
+  dragStartX = e.clientX;
+  dragStartY = e.clientY;
+  isDragging = true;
+  lightboxImg.setPointerCapture(e.pointerId);
+});
+lightboxImg?.addEventListener('pointermove', (e) => {
+  if(!isDragging) return;
+  if(zoom > 1){
+    offsetX += e.clientX - dragStartX;
+    offsetY += e.clientY - dragStartY;
+    dragStartX = e.clientX;
+    dragStartY = e.clientY;
+    updateZoom();
+  }
+});
+lightboxImg?.addEventListener('pointerup', (e) => {
+  lightboxImg.releasePointerCapture(e.pointerId);
+  if(isDragging && zoom === 1){
+    const dx = e.clientX - dragStartX;
+    if(Math.abs(dx) > 50) showNext(dx < 0 ? 1 : -1);
+  }
+  isDragging = false;
+});
+lightboxImg?.addEventListener('pointercancel', () => { isDragging = false; });
+
+lightboxImg?.addEventListener('touchstart', (e) => {
+  if(e.touches.length === 2){
+    e.preventDefault();
+    isDragging = false;
+    pinchDist = Math.hypot(
+      e.touches[0].clientX - e.touches[1].clientX,
+      e.touches[0].clientY - e.touches[1].clientY
+    );
+    pinchZoom = zoom;
+  }
+}, {passive:false});
+lightboxImg?.addEventListener('touchmove', (e) => {
+  if(e.touches.length === 2){
+    e.preventDefault();
+    const dist = Math.hypot(
+      e.touches[0].clientX - e.touches[1].clientX,
+      e.touches[0].clientY - e.touches[1].clientY
+    );
+    zoom = Math.min(Math.max(pinchZoom * dist / pinchDist, 1), 5);
+    updateZoom();
+  }
+}, {passive:false});
 
 // Слайдер для карток котеджів
 document.querySelectorAll('.card-gallery').forEach(gal => {
