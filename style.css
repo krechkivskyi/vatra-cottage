@@ -116,7 +116,8 @@ section { padding: 64px 0; }
 .review-summary .source-icon,
 .review-card .source-icon { width: 24px; height: 24px; border-radius: 50%; }
 .review-summary .overall { display: flex; align-items: center; gap: 8px; justify-content: center; font-weight: 700; }
-.review-grid { display: flex; gap: 20px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; scroll-behavior: smooth; }
+.review-grid { display: flex; gap: 20px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; scroll-behavior: smooth; cursor: grab; }
+.review-grid.dragging { cursor: grabbing; user-select: none; }
 .review-grid::-webkit-scrollbar { display: none; }
 .review-card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 18px; display: grid; gap: 10px; flex: 0 0 260px; scroll-snap-align: start; }
 .review-card .review-header { display: flex; align-items: center; gap: 10px; }
