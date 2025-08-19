@@ -153,23 +153,29 @@ function renderReviews(){
   });
 
   if(list.children.length){
-    const first = list.firstElementChild.cloneNode(true);
-    const last = list.lastElementChild.cloneNode(true);
-    list.appendChild(first);
-    list.insertBefore(last, list.firstElementChild);
-
+    const cards = Array.from(list.children);
     const gap = parseInt(getComputedStyle(list).columnGap || getComputedStyle(list).gap) || 0;
-    const cardWidth = list.firstElementChild.offsetWidth + gap;
-    list.scrollLeft = cardWidth;
+    const cardWidth = cards[0].offsetWidth + gap;
+    const visible = Math.max(1, Math.round(list.clientWidth / cardWidth));
+
+    for(let i = visible - 1; i >= 0; i--){
+      list.insertBefore(cards[cards.length - visible + i].cloneNode(true), list.firstElementChild);
+    }
+    for(let i = 0; i < visible; i++){
+      list.appendChild(cards[i].cloneNode(true));
+    }
+
+    const total = cards.length;
+    list.scrollLeft = cardWidth * visible;
 
     list.addEventListener('scroll', () => {
       if (list.scrollLeft <= 0) {
         list.style.scrollBehavior = 'auto';
-        list.scrollLeft = list.scrollWidth - cardWidth * 2;
+        list.scrollLeft = cardWidth * total;
         list.style.scrollBehavior = 'smooth';
-      } else if (list.scrollLeft >= list.scrollWidth - list.clientWidth) {
+      } else if (list.scrollLeft >= cardWidth * (total + visible)) {
         list.style.scrollBehavior = 'auto';
-        list.scrollLeft = cardWidth;
+        list.scrollLeft = cardWidth * visible;
         list.style.scrollBehavior = 'smooth';
       }
     });
