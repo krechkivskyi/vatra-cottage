@@ -168,6 +168,7 @@ function renderReviews(){
     const total = cards.length;
     list.scrollLeft = cardWidth * visible;
     const getMaxScroll = () => list.scrollWidth - list.clientWidth;
+    const buffer = 1; // tolerance in px to detect scroll edges
 
     list.addEventListener('scroll', () => {
       const maxScroll = getMaxScroll();
@@ -175,7 +176,7 @@ function renderReviews(){
         list.style.scrollBehavior = 'auto';
         list.scrollLeft += cardWidth * total;
         list.style.scrollBehavior = 'smooth';
-      } else if (list.scrollLeft >= maxScroll) {
+      } else if (list.scrollLeft + buffer >= maxScroll) {
         list.style.scrollBehavior = 'auto';
         list.scrollLeft -= cardWidth * total;
         list.style.scrollBehavior = 'smooth';
@@ -186,11 +187,11 @@ function renderReviews(){
     const next = document.getElementById('reviewsNext');
     const scrollByCard = (dir) => {
       const maxScroll = getMaxScroll();
-      if (dir > 0 && list.scrollLeft + cardWidth > maxScroll) {
+      if (dir > 0 && list.scrollLeft + cardWidth >= maxScroll - buffer) {
         list.style.scrollBehavior = 'auto';
         list.scrollLeft -= cardWidth * total;
         list.style.scrollBehavior = 'smooth';
-      } else if (dir < 0 && list.scrollLeft - cardWidth < 0) {
+      } else if (dir < 0 && list.scrollLeft - cardWidth <= buffer) {
         list.style.scrollBehavior = 'auto';
         list.scrollLeft += cardWidth * total;
         list.style.scrollBehavior = 'smooth';
