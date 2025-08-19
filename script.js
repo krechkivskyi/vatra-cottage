@@ -99,14 +99,24 @@ document.querySelectorAll('.card-gallery').forEach(gal => {
   show(0);
 });
 
-// Відгуки гостей
-const reviews = [
+// Відгуки гостей (можна додати більше за потреби)
+const allReviews = [
   { source: 'google', author: 'Іван', date: '2024-04-03', rating: 5, text: 'Чудовий відпочинок! Чисто і затишно.' },
   { source: 'booking', author: 'Марія', date: '2024-04-10', rating: 4, text: 'Сподобалося місце, є все необхідне.' },
   { source: 'booking', author: 'Олег', date: '2024-05-05', rating: 5, text: 'Дуже гостинні господарі та гарна природа.' },
   { source: 'booking', author: 'Наталія', date: '2024-05-20', rating: 4, text: 'Комфортно та затишно. Рекомендую.' },
-  { source: 'google', author: 'Анна', date: '2024-06-15', rating: 5, text: 'Прекрасний сервіс і краєвиди.' }
+  { source: 'google', author: 'Анна', date: '2024-06-15', rating: 5, text: 'Прекрасний сервіс і краєвиди.' },
+  { source: 'google', author: 'Петро', date: '2024-06-20', rating: 5, text: 'Все сподобалось, будемо ще.' },
+  { source: 'booking', author: 'Олена', date: '2024-06-25', rating: 4, text: 'Затишно та чисто.' },
+  { source: 'google', author: 'Сергій', date: '2024-07-01', rating: 5, text: 'Красива природа та комфортні умови.' },
+  { source: 'booking', author: 'Юлія', date: '2024-07-05', rating: 5, text: 'Дуже сподобалось перебування.' },
+  { source: 'google', author: 'Роман', date: '2024-07-10', rating: 4, text: 'Добре місце для сімейного відпочинку.' }
 ];
+
+function getRandomReviews(count){
+  const shuffled = allReviews.slice().sort(() => Math.random() - 0.5);
+  return shuffled.slice(0, Math.min(count, shuffled.length));
+}
 
 function renderStars(r){
   const full = Math.round(r);
@@ -121,15 +131,10 @@ function renderReviews(){
   const list = document.getElementById('reviewsList');
   const summary = document.getElementById('reviewSummary');
   if(!list || !summary) return;
-  list.innerHTML = '';
-  let total = 0;
-  const stats = {};
-  reviews.forEach(r => {
-    total += r.rating;
-    stats[r.source] = stats[r.source] || {sum:0,count:0};
-    stats[r.source].sum += r.rating;
-    stats[r.source].count++;
 
+  const reviews = getRandomReviews(10);
+  list.innerHTML = '';
+  reviews.forEach(r => {
     const card = document.createElement('article');
     card.className = 'review-card';
     const icon = r.source === 'google' ? 'images/Google_Icon_2025.svg' : 'images/Booking.com_Icon_2022.svg';
@@ -138,7 +143,7 @@ function renderReviews(){
         <img class="source-icon" src="${icon}" alt="${r.source}" />
         <div>
           <div class="author">${r.author}</div>
-          <div class="date">(${formatDate(r.date)})</div>
+          <div class="date">${formatDate(r.date)}</div>
           <div class="stars" aria-label="Рейтинг: ${r.rating} з 5">${renderStars(r.rating)}</div>
         </div>
       </div>
@@ -163,9 +168,42 @@ function renderReviews(){
         list.scrollLeft = cardWidth;
       }
     });
+
+    list.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      list.scrollLeft += e.deltaY;
+    });
+
+    let isDown = false;
+    let startX = 0;
+    let scrollStart = 0;
+    list.addEventListener('mousedown', (e) => {
+      isDown = true;
+      startX = e.pageX;
+      scrollStart = list.scrollLeft;
+      list.classList.add('dragging');
+    });
+    ['mouseleave','mouseup'].forEach(evt => list.addEventListener(evt, () => {
+      isDown = false;
+      list.classList.remove('dragging');
+    }));
+    list.addEventListener('mousemove', (e) => {
+      if(!isDown) return;
+      e.preventDefault();
+      const walk = e.pageX - startX;
+      list.scrollLeft = scrollStart - walk;
+    });
   }
 
-  const overall = (total / reviews.length).toFixed(1);
+  const stats = {};
+  let total = 0;
+  allReviews.forEach(r => {
+    total += r.rating;
+    stats[r.source] = stats[r.source] || {sum:0,count:0};
+    stats[r.source].sum += r.rating;
+    stats[r.source].count++;
+  });
+  const overall = (total / allReviews.length).toFixed(1);
   const sourcesHtml = Object.keys(stats).map(src => {
     const avg = (stats[src].sum / stats[src].count).toFixed(1);
     const label = src === 'google' ? 'Google' : 'Booking.com';
