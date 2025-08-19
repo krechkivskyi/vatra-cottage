@@ -167,16 +167,17 @@ function renderReviews(){
 
     const total = cards.length;
     list.scrollLeft = cardWidth * visible;
-    const maxScroll = list.scrollWidth - list.clientWidth;
+    const getMaxScroll = () => list.scrollWidth - list.clientWidth;
 
     list.addEventListener('scroll', () => {
+      const maxScroll = getMaxScroll();
       if (list.scrollLeft <= 0) {
         list.style.scrollBehavior = 'auto';
-        list.scrollLeft = cardWidth * total;
+        list.scrollLeft += cardWidth * total;
         list.style.scrollBehavior = 'smooth';
       } else if (list.scrollLeft >= maxScroll) {
         list.style.scrollBehavior = 'auto';
-        list.scrollLeft = cardWidth * visible;
+        list.scrollLeft -= cardWidth * total;
         list.style.scrollBehavior = 'smooth';
       }
     });
@@ -184,6 +185,16 @@ function renderReviews(){
     const prev = document.getElementById('reviewsPrev');
     const next = document.getElementById('reviewsNext');
     const scrollByCard = (dir) => {
+      const maxScroll = getMaxScroll();
+      if (dir > 0 && list.scrollLeft + cardWidth > maxScroll) {
+        list.style.scrollBehavior = 'auto';
+        list.scrollLeft -= cardWidth * total;
+        list.style.scrollBehavior = 'smooth';
+      } else if (dir < 0 && list.scrollLeft - cardWidth < 0) {
+        list.style.scrollBehavior = 'auto';
+        list.scrollLeft += cardWidth * total;
+        list.style.scrollBehavior = 'smooth';
+      }
       list.scrollBy({ left: cardWidth * dir, behavior: 'smooth' });
     };
     prev.addEventListener('click', () => scrollByCard(-1));
