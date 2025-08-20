@@ -136,12 +136,12 @@ section { padding: 64px 0; }
 }
 .review-carousel::before {
   left: 0;
-  width: 14px;
+  width: 10px;
   background: linear-gradient(to right, var(--bg), transparent);
 }
 .review-carousel::after {
   right: 0;
-  width: 40px;
+  width: 30px;
   background: linear-gradient(to left, var(--bg), transparent);
 }
 .review-grid {
