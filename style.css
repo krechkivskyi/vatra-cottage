@@ -122,8 +122,9 @@ section { padding: 64px 0; }
 .review-carousel {
   --carousel-bottom-padding: 40px;
   position: relative;
+  overflow: visible;
+  overflow-x: hidden;
   padding-bottom: var(--carousel-bottom-padding);
-  overflow: hidden;
 }
 .review-carousel::before,
 .review-carousel::after {
@@ -148,8 +149,8 @@ section { padding: 64px 0; }
   display: flex;
   gap: 20px;
   align-items: flex-start;
+  overflow: visible;
   overflow-x: auto;
-  overflow-y: hidden;
   scroll-snap-type: x mandatory;
   scrollbar-width: none;
   scroll-behavior: smooth;

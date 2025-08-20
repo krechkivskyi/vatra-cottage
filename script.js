@@ -259,11 +259,13 @@ function renderReviews(){
 
   const cards = Array.from(list.children);
   const maxHeight = Math.max(...cards.map(c => c.offsetHeight));
-  list.style.height = `${maxHeight}px`;
+  const carousel = list.parentElement;
+  const padding = parseInt(getComputedStyle(carousel).getPropertyValue('--carousel-bottom-padding')) || 0;
+  list.style.height = `${maxHeight + padding}px`;
 
   const minHeight = Math.min(...cards.map(c => c.offsetHeight));
   document.querySelectorAll('.review-nav').forEach(nav => {
-    nav.style.top = `${minHeight / 2}px`;
+    nav.style.top = `${(minHeight + padding) / 2}px`;
   });
 
   if(list.children.length){
