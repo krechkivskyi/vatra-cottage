@@ -349,7 +349,7 @@ const reviewLightboxClose = document.getElementById('reviewLightboxClose');
 
 function openFullReview(review){
   if(!reviewLightbox || !reviewLightboxContent) return;
-  reviewLightboxContent.innerHTML = reviewHTML(review, true);
+  reviewLightboxContent.innerHTML = `<article class="review-card">${reviewHTML(review, true)}</article>`;
   reviewLightbox.classList.add('open');
   document.body.style.overflow = 'hidden';
 }
