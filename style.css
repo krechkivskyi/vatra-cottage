@@ -157,7 +157,7 @@ section { padding: 64px 0; }
 .review-grid::-webkit-scrollbar { display: none; }
 .review-nav {
   position: absolute;
-  top: calc(50% - var(--carousel-bottom-padding) * 2.5);
+  top: 0;
   transform: translateY(-50%);
   background: rgba(255,255,255,0.8);
   border: none;
