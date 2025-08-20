@@ -190,14 +190,14 @@ document.querySelectorAll('.card-gallery').forEach(gal => {
 // Відгуки гостей (можна додати більше за потреби)
 const allReviews = [
   { source: 'google', author: 'Іван', date: '2024-04-03', rating: 5, text: 'Чудовий відпочинок! Чисто і затишно.' },
-  { source: 'booking', author: 'Марія', date: '2024-04-10', rating: 4, text: 'Сподобалося місце, є все необхідне.' },
+  { source: 'booking', author: 'Марія', date: '2024-04-10', rating: 4.8, text: 'Сподобалося місце, є все необхідне. Власники дуже привітні і завжди готові допомогти. Номер чистий, ліжка зручні, а з вікна відкривається прекрасний вид на гори. Особливо сподобалась тераса, де ми щоранку пили каву. До центру містечка кілька хвилин ходьби, але навколо тиша й спокій, що дає змогу відпочити від міської метушні. Обовʼязково приїдемо ще!' },
   { source: 'booking', author: 'Олег', date: '2024-05-05', rating: 5, text: 'Дуже гостинні господарі та гарна природа.' },
-  { source: 'booking', author: 'Наталія', date: '2024-05-20', rating: 4, text: 'Комфортно та затишно. Рекомендую.' },
+  { source: 'booking', author: 'Наталія', date: '2024-05-20', rating: 4.5, text: 'Комфортно та затишно. Рекомендую.' },
   { source: 'google', author: 'Анна', date: '2024-06-15', rating: 5, text: 'Прекрасний сервіс і краєвиди.' },
   { source: 'google', author: 'Петро', date: '2024-06-20', rating: 5, text: 'Все сподобалось, будемо ще.' },
-  { source: 'booking', author: 'Олена', date: '2024-06-25', rating: 4, text: 'Затишно та чисто.' },
+  { source: 'booking', author: 'Олена', date: '2024-06-25', rating: 4.2, text: 'Затишно та чисто.' },
   { source: 'google', author: 'Сергій', date: '2024-07-01', rating: 5, text: 'Красива природа та комфортні умови.' },
-  { source: 'booking', author: 'Юлія', date: '2024-07-05', rating: 5, text: 'Дуже сподобалось перебування.' },
+  { source: 'booking', author: 'Юлія', date: '2024-07-05', rating: 4.7, text: 'Дуже сподобалось перебування.' },
   { source: 'google', author: 'Роман', date: '2024-07-10', rating: 4, text: 'Добре місце для сімейного відпочинку.' }
 ];
 
@@ -215,6 +215,33 @@ function formatDate(str){
   return new Date(str).toLocaleDateString('uk-UA', { day: 'numeric', month: 'short', year: 'numeric' });
 }
 
+function formatBookingScore(r){
+  const score = r * 2;
+  return score === 10 ? '10' : score.toFixed(1).replace('.', ',');
+}
+
+function reviewHTML(r, full=false){
+  const icon = r.source === 'google' ? 'images/Google_Icon_2025.svg' : 'images/Booking.com_Icon_2022.svg';
+  const ratingHtml = r.source === 'booking'
+    ? `<div class="booking-rating">${formatBookingScore(r.rating)}</div>`
+    : `<div class="stars" aria-label="Рейтинг: ${r.rating} з 5">${renderStars(r.rating)}</div>`;
+  let text = r.text;
+  if(!full && text.length > 255){
+    text = `${text.slice(0,255).trim()}… <button class="read-more">Переглянути весь відгук</button>`;
+  }
+  return `
+      <div class="review-header">
+        <img class="source-icon" src="${icon}" alt="${r.source}" />
+        <div>
+          <div class="author">${r.author}</div>
+          <div class="date">${formatDate(r.date)}</div>
+        </div>
+        ${ratingHtml}
+      </div>
+      <p>${text}</p>
+  `;
+}
+
 function renderReviews(){
   const list = document.getElementById('reviewsList');
   const summary = document.getElementById('reviewSummary');
@@ -222,26 +249,19 @@ function renderReviews(){
 
   const reviews = getRandomReviews(10);
   list.innerHTML = '';
-  reviews.forEach(r => {
+  reviews.forEach((r,i) => {
     const card = document.createElement('article');
     card.className = 'review-card';
-    const icon = r.source === 'google' ? 'images/Google_Icon_2025.svg' : 'images/Booking.com_Icon_2022.svg';
-    card.innerHTML = `
-      <div class="review-header">
-        <img class="source-icon" src="${icon}" alt="${r.source}" />
-        <div>
-          <div class="author">${r.author}</div>
-          <div class="date">${formatDate(r.date)}</div>
-          <div class="stars" aria-label="Рейтинг: ${r.rating} з 5">${renderStars(r.rating)}</div>
-        </div>
-      </div>
-      <p>${r.text}</p>
-    `;
+    card.dataset.index = String(i);
+    card.innerHTML = reviewHTML(r);
     list.appendChild(card);
   });
 
+  const cards = Array.from(list.children);
+  const maxHeight = Math.max(...cards.map(c => c.offsetHeight));
+  list.style.height = `${maxHeight}px`;
+
   if(list.children.length){
-    const cards = Array.from(list.children);
     const gap = parseInt(getComputedStyle(list).columnGap || getComputedStyle(list).gap) || 0;
     const cardWidth = cards[0].offsetWidth + gap;
     const visible = Math.max(1, Math.round(list.clientWidth / cardWidth));
@@ -288,6 +308,16 @@ function renderReviews(){
     };
     prev.addEventListener('click', () => scrollByCard(-1));
     next.addEventListener('click', () => scrollByCard(1));
+
+    list.addEventListener('click', (e) => {
+      const btn = e.target.closest('.read-more');
+      if(btn){
+        const card = btn.closest('.review-card');
+        if(!card) return;
+        const idx = Number(card.dataset.index);
+        openFullReview(reviews[idx]);
+      }
+    });
   }
 
   const stats = {};
@@ -312,5 +342,27 @@ function renderReviews(){
 }
 
 document.addEventListener('DOMContentLoaded', renderReviews);
+
+const reviewLightbox = document.getElementById('reviewLightbox');
+const reviewLightboxContent = document.getElementById('reviewLightboxContent');
+const reviewLightboxClose = document.getElementById('reviewLightboxClose');
+
+function openFullReview(review){
+  if(!reviewLightbox || !reviewLightboxContent) return;
+  reviewLightboxContent.innerHTML = reviewHTML(review, true);
+  reviewLightbox.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeFullReview(){
+  if(!reviewLightbox || !reviewLightboxContent) return;
+  reviewLightbox.classList.remove('open');
+  reviewLightboxContent.innerHTML = '';
+  document.body.style.overflow = '';
+}
+
+reviewLightboxClose?.addEventListener('click', closeFullReview);
+reviewLightbox?.addEventListener('click', (e) => { if(e.target === reviewLightbox) closeFullReview(); });
+document.addEventListener('keydown', (e) => { if(e.key === 'Escape' && reviewLightbox?.classList.contains('open')) closeFullReview(); });
 
 // Хелпер для Viber/Telegram (за потреби)

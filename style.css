@@ -120,7 +120,7 @@ section { padding: 64px 0; }
 .review-card .source-icon { width: 24px; height: 24px; border-radius: 50%; }
 .review-summary .overall { display: flex; align-items: center; gap: 8px; justify-content: center; font-weight: 700; }
 .review-carousel { position: relative; }
-.review-grid { display: flex; gap: 20px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; scroll-behavior: smooth; }
+.review-grid { display: flex; gap: 20px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; scroll-behavior: smooth; align-items: flex-start; }
 .review-nav { position: absolute; top: 50%; transform: translateY(-50%); background: var(--card); border: none; width: 44px; height: 44px; border-radius: 50%; box-shadow: var(--shadow); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 700; }
 .review-nav.prev { left: -22px; }
 .review-nav.next { right: -22px; }
@@ -128,10 +128,19 @@ section { padding: 64px 0; }
 .review-grid::-webkit-scrollbar { display: none; }
 .review-card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 18px; display: grid; gap: 10px; flex: 0 0 260px; scroll-snap-align: start; }
 .review-card .review-header { display: flex; align-items: center; gap: 10px; }
+.review-card .review-header .stars,
+.review-card .review-header .booking-rating { margin-left: auto; }
+.booking-rating { background: #003580; color: #fff; font-weight: 700; padding: 4px 6px; border-radius: 4px; min-width: 32px; text-align: center; }
 .review-card .author { font-weight: 700; }
 .review-card .date { font-size: 0.85em; color: var(--muted); }
 .review-card p { margin: 0; }
+.review-card .read-more { background: none; border: none; color: var(--brand); cursor: pointer; padding: 0; font: inherit; }
 .stars { color: #f5a623; letter-spacing: 1px; }
+
+.review-lightbox { position: fixed; inset: 0; background: rgba(0,0,0,.8); display: none; align-items: center; justify-content: center; padding: 24px; z-index: 1000; }
+.review-lightbox.open { display: flex; }
+.review-lightbox .close { position: absolute; top: 20px; right: 20px; background: white; border: none; border-radius: 8px; padding: 10px 14px; font-weight: 700; cursor: pointer; }
+.review-lightbox .review-card { max-width: 600px; max-height: 85vh; overflow-y: auto; }
 
 /* Contacts */
 .contacts { display: grid; grid-template-columns: 1.1fr .9fr; gap: 20px; }
