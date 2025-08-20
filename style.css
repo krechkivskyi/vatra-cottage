@@ -157,9 +157,9 @@ section { padding: 64px 0; }
 .review-grid::-webkit-scrollbar { display: none; }
 .review-nav {
   position: absolute;
-  top: calc(50% - var(--carousel-bottom-padding) * 1.5);
+  top: calc(50% - var(--carousel-bottom-padding) * 2.5);
   transform: translateY(-50%);
-  background: var(--card);
+  background: rgba(255,255,255,0.8);
   border: none;
   width: 44px;
   height: 44px;
@@ -172,11 +172,10 @@ section { padding: 64px 0; }
   font-size: 24px;
   font-weight: 700;
   z-index: 2;
-  opacity: 0.4;
-  transition: opacity 0.2s;
+  transition: background 0.2s;
 }
 .review-nav:hover {
-  opacity: 1;
+  background: var(--card);
 }
 .review-nav.prev { left: 10px; }
 .review-nav.next { right: 10px; }
