@@ -80,9 +80,10 @@ section { padding: 64px 0; }
 .card-gallery button { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,.8); border: none; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-weight: 700; z-index: 1; transition: background 0.2s; }
 .card-gallery button:hover { background: var(--card); }
 .card-gallery button.prev { left: 8px; }
-.card-gallery button.next { right: 8px; }
-.card-body { padding: 16px; display: grid; gap: 10px; }
-.badge { display: inline-block; padding: 6px 10px; border-radius: 999px; background: #fdeaea; color: var(--brand-2); font-weight: 700; font-size: 12px; }
+  .card-gallery button.next { right: 8px; }
+  .card-body { padding: 16px; display: grid; gap: 10px; }
+  .card-title { display: flex; align-items: center; gap: 10px; margin: 0; }
+  .badge { flex: 1; display: flex; align-items: center; justify-content: left; padding: 6px 10px; border-radius: 999px; background: #fdeaea; color: var(--brand-2); font-weight: 700; font-size: 12px; }
 .features { display: flex; flex-wrap: wrap; gap: 10px; color: var(--muted); font-size: 14px; }
 .price { font-size: 18px; font-weight: 800; }
 .actions { display: flex; gap: 10px; margin-top: 4px; flex-wrap: wrap; }
