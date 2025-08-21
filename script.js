@@ -257,11 +257,11 @@ function renderReviews(){
     list.appendChild(card);
   });
 
-  const cards = Array.from(list.children);
-  const maxHeight = Math.max(...cards.map(c => c.offsetHeight));
-  const carousel = list.parentElement;
-  const padding = parseInt(getComputedStyle(carousel).getPropertyValue('--carousel-bottom-padding')) || 0;
-  list.style.height = `${maxHeight + padding}px`;
+    const cards = Array.from(list.children);
+    const maxHeight = Math.max(...cards.map(c => c.offsetHeight));
+    const carousel = list.parentElement;
+    const padding = parseInt(getComputedStyle(carousel).getPropertyValue('--carousel-bottom-padding')) || 0;
+    list.style.height = `${maxHeight + padding}px`;
 
   const minHeight = Math.min(...cards.map(c => c.offsetHeight));
   document.querySelectorAll('.review-nav').forEach(nav => {
@@ -269,9 +269,10 @@ function renderReviews(){
   });
 
   if(list.children.length){
-    const gap = parseInt(getComputedStyle(list).columnGap || getComputedStyle(list).gap) || 0;
-    const cardWidth = cards[0].offsetWidth + gap;
-    const visible = Math.max(1, Math.round(list.clientWidth / cardWidth));
+      const gap = parseInt(getComputedStyle(list).columnGap || getComputedStyle(list).gap) || 0;
+      const cardWidth = cards[0].offsetWidth + gap;
+      const visible = Math.max(1, Math.round(list.clientWidth / cardWidth));
+      const centerOffset = (list.clientWidth - cardWidth) / 2;
 
     for(let i = visible - 1; i >= 0; i--){
       list.insertBefore(cards[cards.length - visible + i].cloneNode(true), list.firstElementChild);
@@ -280,39 +281,43 @@ function renderReviews(){
       list.appendChild(cards[i].cloneNode(true));
     }
 
-    const total = cards.length;
-    list.scrollLeft = cardWidth * visible;
-    const getMaxScroll = () => list.scrollWidth - list.clientWidth;
-    const buffer = 1; // tolerance in px to detect scroll edges
+      const total = cards.length;
+      list.scrollLeft = cardWidth * visible - centerOffset;
+      const getMaxScroll = () => list.scrollWidth - list.clientWidth;
+      const buffer = 1; // tolerance in px to detect scroll edges
 
-    list.addEventListener('scroll', () => {
-      const maxScroll = getMaxScroll();
-      if (list.scrollLeft <= 0) {
-        list.style.scrollBehavior = 'auto';
-        list.scrollLeft += cardWidth * total;
-        list.style.scrollBehavior = 'smooth';
-      } else if (list.scrollLeft + buffer >= maxScroll) {
-        list.style.scrollBehavior = 'auto';
-        list.scrollLeft -= cardWidth * total;
-        list.style.scrollBehavior = 'smooth';
-      }
-    });
+      list.addEventListener('scroll', () => {
+        const maxScroll = getMaxScroll();
+        const leftEdge = centerOffset;
+        const rightEdge = maxScroll - centerOffset;
+        if (list.scrollLeft <= leftEdge + buffer) {
+          list.style.scrollBehavior = 'auto';
+          list.scrollLeft += cardWidth * total;
+          list.style.scrollBehavior = 'smooth';
+        } else if (list.scrollLeft + buffer >= rightEdge) {
+          list.style.scrollBehavior = 'auto';
+          list.scrollLeft -= cardWidth * total;
+          list.style.scrollBehavior = 'smooth';
+        }
+      });
 
-    const prev = document.getElementById('reviewsPrev');
-    const next = document.getElementById('reviewsNext');
-    const scrollByCard = (dir) => {
-      const maxScroll = getMaxScroll();
-      if (dir > 0 && list.scrollLeft + cardWidth >= maxScroll - buffer) {
-        list.style.scrollBehavior = 'auto';
-        list.scrollLeft -= cardWidth * total;
-        list.style.scrollBehavior = 'smooth';
-      } else if (dir < 0 && list.scrollLeft - cardWidth <= buffer) {
-        list.style.scrollBehavior = 'auto';
-        list.scrollLeft += cardWidth * total;
-        list.style.scrollBehavior = 'smooth';
-      }
-      list.scrollBy({ left: cardWidth * dir, behavior: 'smooth' });
-    };
+      const prev = document.getElementById('reviewsPrev');
+      const next = document.getElementById('reviewsNext');
+      const scrollByCard = (dir) => {
+        const maxScroll = getMaxScroll();
+        const leftEdge = centerOffset;
+        const rightEdge = maxScroll - centerOffset;
+        if (dir > 0 && list.scrollLeft + cardWidth >= rightEdge - buffer) {
+          list.style.scrollBehavior = 'auto';
+          list.scrollLeft -= cardWidth * total;
+          list.style.scrollBehavior = 'smooth';
+        } else if (dir < 0 && list.scrollLeft - cardWidth <= leftEdge + buffer) {
+          list.style.scrollBehavior = 'auto';
+          list.scrollLeft += cardWidth * total;
+          list.style.scrollBehavior = 'smooth';
+        }
+        list.scrollBy({ left: cardWidth * dir, behavior: 'smooth' });
+      };
     prev.addEventListener('click', () => scrollByCard(-1));
     next.addEventListener('click', () => scrollByCard(1));
 

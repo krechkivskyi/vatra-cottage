@@ -181,7 +181,7 @@ section { padding: 64px 0; }
 .review-nav.prev { left: 10px; }
 .review-nav.next { right: 10px; }
 @media (hover: none) and (pointer: coarse) { .review-nav { display: none; } }
-.review-card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 18px; display: grid; gap: 10px; flex: 0 0 260px; scroll-snap-align: start; }
+.review-card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 18px; display: grid; gap: 10px; flex: 0 0 260px; scroll-snap-align: center; }
 .review-card .review-header { display: flex; align-items: center; gap: 10px; }
 .review-card .review-header .stars,
 .review-card .review-header .booking-rating { margin-left: auto; }
