@@ -77,7 +77,8 @@ section { padding: 64px 0; }
   display: none;
 }
 .card-gallery img.active { display: block; }
-.card-gallery button { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,.8); border: none; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-weight: 700; z-index: 1; }
+.card-gallery button { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,.8); border: none; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-weight: 700; z-index: 1; transition: background 0.2s; }
+.card-gallery button:hover { background: var(--card); }
 .card-gallery button.prev { left: 8px; }
 .card-gallery button.next { right: 8px; }
 .card-body { padding: 16px; display: grid; gap: 10px; }
@@ -103,9 +104,12 @@ section { padding: 64px 0; }
 }
 .lightbox.open { display: flex; }
 .lightbox img { max-width: 96vw; max-height: 85vh; border-radius: 12px; box-shadow: 0 20px 60px rgba(0,0,0,.4); touch-action: none; cursor: grab; position: relative; z-index: 1; }
-.lightbox .close { position: absolute; top: 20px; right: 20px; background: white; border: none; border-radius: 8px; padding: 10px 14px; font-weight: 700; cursor: pointer; }
+.lightbox .close { position: absolute; top: 20px; right: 20px; background: rgba(255,255,255,.8); border: none; border-radius: 8px; padding: 10px 14px; font-weight: 700; cursor: pointer; transition: background 0.2s; }
+.lightbox .close:hover { background: var(--card); }
 .lightbox .prev,
-.lightbox .next { position: absolute; top: 50%; transform: translateY(-50%); background: white; border: none; width: 44px; height: 44px; border-radius: 50%; cursor: pointer; font-size: 24px; font-weight: 700; display: none; }
+.lightbox .next { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,.8); border: none; width: 44px; height: 44px; border-radius: 50%; cursor: pointer; font-size: 24px; font-weight: 700; display: none; transition: background 0.2s; }
+.lightbox .prev:hover,
+.lightbox .next:hover { background: var(--card); }
 .lightbox .prev { left: 20px; }
 .lightbox .next { right: 20px; }
 .lightbox .close,
@@ -194,7 +198,8 @@ section { padding: 64px 0; }
 
 .review-lightbox { position: fixed; inset: 0; background: rgba(0,0,0,.8); display: none; align-items: center; justify-content: center; padding: 24px; z-index: 1000; }
 .review-lightbox.open { display: flex; }
-.review-lightbox .close { position: absolute; top: 20px; right: 20px; background: white; border: none; border-radius: 8px; padding: 10px 14px; font-weight: 700; cursor: pointer; }
+.review-lightbox .close { position: absolute; top: 20px; right: 20px; background: rgba(255,255,255,.8); border: none; border-radius: 8px; padding: 10px 14px; font-weight: 700; cursor: pointer; transition: background 0.2s; }
+.review-lightbox .close:hover { background: var(--card); }
 .review-lightbox .review-card { max-width: 600px; max-height: 85vh; overflow-y: auto; }
 
 /* Contacts */
