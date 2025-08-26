@@ -439,19 +439,25 @@ const icsLinks = {
 };
 
 async function fetchIcsEvents(url){
-  const res = await fetch(url);
-  const text = await res.text();
-  const jcal = ICAL.parse(text);
-  const comp = new ICAL.Component(jcal);
-  return comp.getAllSubcomponents('vevent').map(v => {
-    const ev = new ICAL.Event(v);
-    return {
-      title: 'Зайнято',
-      start: ev.startDate.toJSDate(),
-      end: ev.endDate.toJSDate(),
-      allDay: ev.startDate.isDate
-    };
-  });
+  try {
+    const proxyUrl = `https://cors.isomorphic-git.org/${url}`;
+    const res = await fetch(proxyUrl);
+    const text = await res.text();
+    const jcal = ICAL.parse(text);
+    const comp = new ICAL.Component(jcal);
+    return comp.getAllSubcomponents('vevent').map(v => {
+      const ev = new ICAL.Event(v);
+      return {
+        title: 'Зайнято',
+        start: ev.startDate.toJSDate(),
+        end: ev.endDate.toJSDate(),
+        allDay: ev.startDate.isDate
+      };
+    });
+  } catch (e) {
+    console.error('Не вдалося завантажити календар', e);
+    return [];
+  }
 }
 
 async function openCalendar(id){
