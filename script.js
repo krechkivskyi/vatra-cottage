@@ -438,7 +438,23 @@ const icsLinks = {
   2: 'https://ical.booking.com/v1/export?t=34812d3f-ed21-4935-ab56-76452c38388f'
 };
 
-function openCalendar(id){
+async function fetchIcsEvents(url){
+  const res = await fetch(url);
+  const text = await res.text();
+  const jcal = ICAL.parse(text);
+  const comp = new ICAL.Component(jcal);
+  return comp.getAllSubcomponents('vevent').map(v => {
+    const ev = new ICAL.Event(v);
+    return {
+      title: 'Зайнято',
+      start: ev.startDate.toJSDate(),
+      end: ev.endDate.toJSDate(),
+      allDay: ev.startDate.isDate
+    };
+  });
+}
+
+async function openCalendar(id){
   if(!calendarLightbox || !calendarLightboxContent) return;
   const url = icsLinks[id];
   if(!url) return;
@@ -450,17 +466,14 @@ function openCalendar(id){
   calendarLightbox.classList.add('open');
   document.body.style.overflow = 'hidden';
 
+  const events = await fetchIcsEvents(url);
   const calendarEl = document.getElementById('calendar');
   const calendar = new FullCalendar.Calendar(calendarEl, {
     initialView: 'dayGridMonth',
     height: 600,
     displayEventTime: false,
-    events: {
-      url,
-      format: 'ics'
-    },
-    eventDataTransform: (eventData) => ({ ...eventData, title: 'Зайнято' }),
-    eventColor: '#f09300',
+    events,
+    eventColor: '#d64045',
     eventClick: (info) => { info.jsEvent.preventDefault(); }
   });
   calendar.render();
