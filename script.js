@@ -372,4 +372,60 @@ reviewLightboxClose?.addEventListener('click', closeFullReview);
 reviewLightbox?.addEventListener('click', (e) => { if(e.target === reviewLightbox) closeFullReview(); });
 document.addEventListener('keydown', (e) => { if(e.key === 'Escape' && reviewLightbox?.classList.contains('open')) closeFullReview(); });
 
+// Price modal
+const priceLightbox = document.getElementById('priceLightbox');
+const priceLightboxContent = document.getElementById('priceLightboxContent');
+const priceLightboxClose = document.getElementById('priceLightboxClose');
+
+const priceInfo = {
+  1: {
+    title: 'Ціни за добу проживання в Котеджі #1',
+    list: [
+      '6 осіб: 3000 гривень',
+      '5 осіб: 2800 гривень',
+      '4 особи: 2600 гривень',
+      '3 особи: 2400 гривень',
+      '2 особи: 2200 гривень'
+    ]
+  },
+  2: {
+    title: 'Ціни за добу проживання в Котеджі #2',
+    list: [
+      '4 особи: 2600 гривень',
+      '3 особи: 2400 гривень',
+      '2 особи: 2200 гривень'
+    ]
+  },
+  extra: 'Ціна за проживання дітей така ж, як і за проживання дорослих. Домашні улюбленці можуть проживати за додаткову плату 200 гривень за добу.'
+};
+
+function openPrices(id){
+  if(!priceLightbox || !priceLightboxContent) return;
+  const data = priceInfo[id];
+  if(!data) return;
+  const list = data.list.map(item => `<li>${item}</li>`).join('');
+  priceLightboxContent.innerHTML = `
+    <article class="price-card">
+      <h3>${data.title}</h3>
+      <ul class="price-list">${list}</ul>
+      <p>${priceInfo.extra}</p>
+    </article>`;
+  priceLightbox.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closePrices(){
+  if(!priceLightbox || !priceLightboxContent) return;
+  priceLightbox.classList.remove('open');
+  priceLightboxContent.innerHTML = '';
+  document.body.style.overflow = '';
+}
+
+document.querySelectorAll('.price-btn').forEach(btn => {
+  btn.addEventListener('click', () => openPrices(btn.dataset.cottage));
+});
+priceLightboxClose?.addEventListener('click', closePrices);
+priceLightbox?.addEventListener('click', (e) => { if(e.target === priceLightbox) closePrices(); });
+document.addEventListener('keydown', (e) => { if(e.key === 'Escape' && priceLightbox?.classList.contains('open')) closePrices(); });
+
 // Хелпер для Viber/Telegram (за потреби)
