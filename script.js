@@ -489,10 +489,10 @@ async function openCalendar(id){
     height: 600,
     locale: 'uk',
     firstDay: 1,
-    headerToolbar: { left: 'today prev title next', center: '', right: '' },
+    headerToolbar: { left: 'prev title next', center: '', right: 'today' },
     buttonText: { today: 'Сьогодні' },
     titleFormat: { year: 'numeric', month: 'long' },
-    titleDidMount: (arg) => { arg.el.textContent = arg.el.textContent.replace(' р.', ''); },
+    titleDidMount: (arg) => { arg.el.textContent = arg.el.textContent.replace(/\s*р\.$/, ''); },
     validRange: { start, end },
     dayCellClassNames: (arg) => busyDates.has(dateKey(arg.date)) ? ['occupied'] : []
   });
