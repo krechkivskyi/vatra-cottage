@@ -438,6 +438,10 @@ const icsLinks = {
   2: 'https://ical.booking.com/v1/export?t=34812d3f-ed21-4935-ab56-76452c38388f'
 };
 
+function dateKey(d){
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+
 async function fetchIcsEvents(url){
   try {
     const proxyUrl = `https://api.codetabs.com/v1/proxy/?quest=${encodeURIComponent(url)}`;
@@ -451,8 +455,7 @@ async function fetchIcsEvents(url){
       let day = ev.startDate.toJSDate();
       const end = ev.endDate.toJSDate();
       while (day < end) {
-        const d = new Date(day.getFullYear(), day.getMonth(), day.getDate());
-        busy.add(d.toISOString().split('T')[0]);
+        busy.add(dateKey(day));
         day.setDate(day.getDate() + 1);
       }
     });
@@ -486,13 +489,10 @@ async function openCalendar(id){
     height: 600,
     locale: 'uk',
     firstDay: 1,
-    headerToolbar: { left: '', center: 'prev,title,next', right: 'today' },
+    headerToolbar: { left: 'prev', center: 'title', right: 'next today' },
     buttonText: { today: 'Сьогодні' },
     validRange: { start, end },
-    dayCellDidMount: (info) => {
-      const iso = info.date.toISOString().split('T')[0];
-      if (busyDates.has(iso)) info.el.classList.add('occupied');
-    }
+    dayCellClassNames: (arg) => busyDates.has(dateKey(arg.date)) ? ['occupied'] : []
   });
   calendar.render();
 }
