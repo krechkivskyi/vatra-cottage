@@ -445,14 +445,16 @@ async function fetchIcsEvents(url){
     const text = await res.text();
     const jcal = ICAL.parse(text);
     const comp = new ICAL.Component(jcal);
-    return comp.getAllSubcomponents('vevent').map(v => {
+    return comp.getAllSubcomponents('vevent').flatMap(v => {
       const ev = new ICAL.Event(v);
-      return {
-        start: ev.startDate.toJSDate(),
-        end: ev.endDate.toJSDate(),
-        allDay: ev.startDate.isDate,
-        display: 'background'
-      };
+      const dates = [];
+      let day = ev.startDate.toJSDate();
+      const end = ev.endDate.toJSDate();
+      while (day < end) {
+        dates.push({ start: new Date(day), allDay: true, display: 'background' });
+        day.setDate(day.getDate() + 1);
+      }
+      return dates;
     });
   } catch (e) {
     console.error('Не вдалося завантажити календар', e);
@@ -485,7 +487,8 @@ async function openCalendar(id){
     events,
     locale: 'uk',
     firstDay: 1,
-    headerToolbar: { left: '', center: 'prev,title', right: 'today next' },
+    headerToolbar: { left: 'today', center: 'prev,title,next', right: '' },
+    buttonText: { today: 'Сьогодні' },
     validRange: { start, end },
     eventDidMount: (info) => {
       const cell = info.el.closest('.fc-daygrid-day');
