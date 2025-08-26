@@ -440,7 +440,7 @@ const icsLinks = {
 
 async function fetchIcsEvents(url){
   try {
-    const proxyUrl = `https://cors.isomorphic-git.org/${url}`;
+    const proxyUrl = `https://api.codetabs.com/v1/proxy/?quest=${encodeURIComponent(url)}`;
     const res = await fetch(proxyUrl);
     const text = await res.text();
     const jcal = ICAL.parse(text);
