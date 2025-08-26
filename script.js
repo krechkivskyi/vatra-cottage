@@ -445,20 +445,21 @@ async function fetchIcsEvents(url){
     const text = await res.text();
     const jcal = ICAL.parse(text);
     const comp = new ICAL.Component(jcal);
-    return comp.getAllSubcomponents('vevent').flatMap(v => {
+    const busy = new Set();
+    comp.getAllSubcomponents('vevent').forEach(v => {
       const ev = new ICAL.Event(v);
-      const dates = [];
       let day = ev.startDate.toJSDate();
       const end = ev.endDate.toJSDate();
       while (day < end) {
-        dates.push({ start: new Date(day), allDay: true, display: 'background' });
+        const d = new Date(day.getFullYear(), day.getMonth(), day.getDate());
+        busy.add(d.toISOString().split('T')[0]);
         day.setDate(day.getDate() + 1);
       }
-      return dates;
     });
+    return busy;
   } catch (e) {
     console.error('Не вдалося завантажити календар', e);
-    return [];
+    return new Set();
   }
 }
 
@@ -475,7 +476,7 @@ async function openCalendar(id){
   calendarLightbox.classList.add('open');
   document.body.style.overflow = 'hidden';
 
-  const events = await fetchIcsEvents(url);
+  const busyDates = await fetchIcsEvents(url);
   const calendarEl = document.getElementById('calendar');
   const today = new Date();
   const start = new Date(today.getFullYear(), today.getMonth(), 1);
@@ -483,19 +484,15 @@ async function openCalendar(id){
   const calendar = new FullCalendar.Calendar(calendarEl, {
     initialView: 'dayGridMonth',
     height: 600,
-    displayEventTime: false,
-    events,
     locale: 'uk',
     firstDay: 1,
-    headerToolbar: { left: 'today', center: 'prev,title,next', right: '' },
+    headerToolbar: { left: '', center: 'prev,title,next', right: 'today' },
     buttonText: { today: 'Сьогодні' },
     validRange: { start, end },
-    eventDidMount: (info) => {
-      const cell = info.el.closest('.fc-daygrid-day');
-      if (cell) cell.classList.add('occupied');
-      info.el.style.display = 'none';
-    },
-    eventClick: (info) => { info.jsEvent.preventDefault(); }
+    dayCellDidMount: (info) => {
+      const iso = info.date.toISOString().split('T')[0];
+      if (busyDates.has(iso)) info.el.classList.add('occupied');
+    }
   });
   calendar.render();
 }

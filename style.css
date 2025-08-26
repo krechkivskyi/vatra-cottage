@@ -246,6 +246,19 @@ section { padding: 64px 0; }
   --fc-today-bg-color: #fdeaea;
 }
 
+.calendar-card .fc-header-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+  margin-bottom: 12px;
+}
+.calendar-card .fc-header-toolbar .fc-toolbar-chunk {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .calendar-card .fc .fc-button {
   border-radius: 8px;
   box-shadow: var(--shadow);
