@@ -489,7 +489,7 @@ async function openCalendar(id){
     height: 600,
     locale: 'uk',
     firstDay: 1,
-    headerToolbar: { left: 'prev title next', center: '', right: 'today' },
+    headerToolbar: { left: 'prev', center: 'title', right: 'next today' },
     buttonText: { today: 'Сьогодні' },
     titleFormat: { year: 'numeric', month: 'long' },
     titleDidMount: (arg) => { arg.el.textContent = arg.el.textContent.replace(/\s*р\.$/, ''); },
@@ -497,6 +497,14 @@ async function openCalendar(id){
     dayCellClassNames: (arg) => busyDates.has(dateKey(arg.date)) ? ['occupied'] : []
   });
   calendar.render();
+  const toolbar = calendarEl.querySelector('.fc-header-toolbar');
+  const todayBtn = toolbar?.querySelector('.fc-today-button');
+  if (toolbar && todayBtn) {
+    const wrap = document.createElement('div');
+    wrap.className = 'fc-today-wrap';
+    wrap.appendChild(todayBtn);
+    toolbar.appendChild(wrap);
+  }
 }
 
 function closeCalendar(){
