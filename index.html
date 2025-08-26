@@ -94,7 +94,7 @@
               <div class="features">камін • тераса • кухня • паркінг • Wi‑Fi</div>
               <div class="price">від 3000 грн/ніч</div>
               <div class="actions">
-                <a class="cta" href="tel:+380000000000">Бронювати</a>
+                <button class="cta price-btn" data-cottage="1" type="button">Ціни</button>
                 <a class="cta secondary" href="#contacts">Запитати доступність</a>
               </div>
             </div>
@@ -118,13 +118,17 @@
               <div class="features">тераса • кухня • дитяче ліжечко • Wi‑Fi</div>
               <div class="price">від 2600 грн/ніч</div>
               <div class="actions">
-                <a class="cta" href="tel:+380000000000">Бронювати</a>
+                <button class="cta price-btn" data-cottage="2" type="button">Ціни</button>
                 <a class="cta secondary" href="#contacts">Запитати доступність</a>
               </div>
             </div>
           </article>
         </div>
         <p class="muted" style="margin-top:16px">* Ціни орієнтовні — оновіть під ваші реальні тарифи.</p>
+      </div>
+      <div class="price-lightbox" id="priceLightbox" role="dialog" aria-modal="true" aria-label="Ціни за проживання">
+        <button class="close" id="priceLightboxClose" aria-label="Закрити">Закрити ✕</button>
+        <div id="priceLightboxContent"></div>
       </div>
     </section>
 
