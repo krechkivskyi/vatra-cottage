@@ -249,7 +249,7 @@ section { padding: 64px 0; }
 .calendar-card .fc-header-toolbar {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   flex-wrap: nowrap;
   margin-bottom: 12px;
 }
@@ -257,6 +257,7 @@ section { padding: 64px 0; }
   display: flex;
   align-items: center;
   gap: 8px;
+  flex: none;
   flex-direction: row;
 }
 .calendar-card .fc-toolbar-title {
