@@ -433,28 +433,37 @@ const calendarLightbox = document.getElementById('calendarLightbox');
 const calendarLightboxContent = document.getElementById('calendarLightboxContent');
 const calendarLightboxClose = document.getElementById('calendarLightboxClose');
 
-const calendarInfo = {
-  1: {
-    title: 'Календар вільних для бронювання дат в Котеджі #1',
-    iframe: '<iframe src="https://calendar.google.com/calendar/embed?height=600&wkst=2&ctz=Europe%2FKiev&showPrint=0&title=%D0%9A%D0%BE%D1%82%D0%B5%D0%B4%D0%B6%20%231&showCalendars=0&showTz=0&src=cWkxazZuMjMxMWJiMWZhamxyYmJ1MmUyMjUzZjRrOGtAaW1wb3J0LmNhbGVuZGFyLmdvb2dsZS5jb20&color=%23f09300" style="border:solid 1px #777" width="800" height="600"></iframe>'
-  },
-  2: {
-    title: 'Календар вільних для бронювання дат в Котеджі #2',
-    iframe: '<iframe src="https://calendar.google.com/calendar/embed?height=600&wkst=2&ctz=Europe%2FKiev&showPrint=0&showCalendars=0&showTz=0&title=%D0%9A%D0%BE%D1%82%D0%B5%D0%B4%D0%B6%20%232&src=NHZpa2hmaWwzY2JoaGtxbmVnaWlhcWtrZjMwa2NoY25AaW1wb3J0LmNhbGVuZGFyLmdvb2dsZS5jb20&color=%23f09300" style="border:solid 1px #777" width="800" height="600"></iframe>'
-  }
+const icsLinks = {
+  1: 'https://ical.booking.com/v1/export?t=efa96061-4119-4efd-8218-b047a22de77f',
+  2: 'https://ical.booking.com/v1/export?t=34812d3f-ed21-4935-ab56-76452c38388f'
 };
 
 function openCalendar(id){
   if(!calendarLightbox || !calendarLightboxContent) return;
-  const data = calendarInfo[id];
-  if(!data) return;
+  const url = icsLinks[id];
+  if(!url) return;
   calendarLightboxContent.innerHTML = `
     <article class="calendar-card">
-      <h3>${data.title}</h3>
-      ${data.iframe}
+      <h3>Календар вільних для бронювання дат в Котеджі #${id}</h3>
+      <div id="calendar"></div>
     </article>`;
   calendarLightbox.classList.add('open');
   document.body.style.overflow = 'hidden';
+
+  const calendarEl = document.getElementById('calendar');
+  const calendar = new FullCalendar.Calendar(calendarEl, {
+    initialView: 'dayGridMonth',
+    height: 600,
+    displayEventTime: false,
+    events: {
+      url,
+      format: 'ics'
+    },
+    eventDataTransform: (eventData) => ({ ...eventData, title: 'Зайнято' }),
+    eventColor: '#f09300',
+    eventClick: (info) => { info.jsEvent.preventDefault(); }
+  });
+  calendar.render();
 }
 
 function closeCalendar(){
