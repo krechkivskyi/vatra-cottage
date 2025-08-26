@@ -448,10 +448,10 @@ async function fetchIcsEvents(url){
     return comp.getAllSubcomponents('vevent').map(v => {
       const ev = new ICAL.Event(v);
       return {
-        title: 'Зайнято',
         start: ev.startDate.toJSDate(),
         end: ev.endDate.toJSDate(),
-        allDay: ev.startDate.isDate
+        allDay: ev.startDate.isDate,
+        display: 'background'
       };
     });
   } catch (e) {
@@ -468,18 +468,30 @@ async function openCalendar(id){
     <article class="calendar-card">
       <h3>Календар вільних для бронювання дат в Котеджі #${id}</h3>
       <div id="calendar"></div>
+      <div class="legend"><div class="legend-item free"><span></span> Вільно</div><div class="legend-item busy"><span></span> Зайнято</div></div>
     </article>`;
   calendarLightbox.classList.add('open');
   document.body.style.overflow = 'hidden';
 
   const events = await fetchIcsEvents(url);
   const calendarEl = document.getElementById('calendar');
+  const today = new Date();
+  const start = new Date(today.getFullYear(), today.getMonth(), 1);
+  const end = new Date(today.getFullYear(), today.getMonth() + 12, 0);
   const calendar = new FullCalendar.Calendar(calendarEl, {
     initialView: 'dayGridMonth',
     height: 600,
     displayEventTime: false,
     events,
-    eventColor: '#d64045',
+    locale: 'uk',
+    firstDay: 1,
+    headerToolbar: { left: '', center: 'prev,title', right: 'today next' },
+    validRange: { start, end },
+    eventDidMount: (info) => {
+      const cell = info.el.closest('.fc-daygrid-day');
+      if (cell) cell.classList.add('occupied');
+      info.el.style.display = 'none';
+    },
     eventClick: (info) => { info.jsEvent.preventDefault(); }
   });
   calendar.render();

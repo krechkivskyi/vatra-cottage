@@ -243,14 +243,46 @@ section { padding: 64px 0; }
   --fc-button-border-color: var(--brand);
   --fc-button-hover-bg-color: var(--brand-2);
   --fc-button-hover-border-color: var(--brand-2);
-  --fc-event-bg-color: var(--brand);
-  --fc-event-border-color: var(--brand);
   --fc-today-bg-color: #fdeaea;
 }
 
 .calendar-card .fc .fc-button {
   border-radius: 8px;
   box-shadow: var(--shadow);
+}
+
+.calendar-card .fc-daygrid-day.occupied {
+  background: var(--brand);
+  border-color: var(--brand);
+}
+.calendar-card .fc-daygrid-day.occupied .fc-daygrid-day-number {
+  color: #fff;
+}
+
+.calendar-card .legend {
+  display: flex;
+  gap: 16px;
+  margin-top: 8px;
+  font-size: 14px;
+}
+.calendar-card .legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.calendar-card .legend-item span {
+  width: 16px;
+  height: 16px;
+  border: 1px solid #e2ddd5;
+  border-radius: 4px;
+  display: block;
+}
+.calendar-card .legend-item.free span {
+  background: var(--card);
+}
+.calendar-card .legend-item.busy span {
+  background: var(--brand);
+  border-color: var(--brand);
 }
 
 /* Contacts */
