@@ -428,4 +428,47 @@ priceLightboxClose?.addEventListener('click', closePrices);
 priceLightbox?.addEventListener('click', (e) => { if(e.target === priceLightbox) closePrices(); });
 document.addEventListener('keydown', (e) => { if(e.key === 'Escape' && priceLightbox?.classList.contains('open')) closePrices(); });
 
+// Calendar modal
+const calendarLightbox = document.getElementById('calendarLightbox');
+const calendarLightboxContent = document.getElementById('calendarLightboxContent');
+const calendarLightboxClose = document.getElementById('calendarLightboxClose');
+
+const calendarInfo = {
+  1: {
+    title: 'Календар вільних для бронювання дат в Котеджі #1',
+    iframe: '<iframe src="https://calendar.google.com/calendar/embed?height=600&wkst=2&ctz=Europe%2FKiev&showPrint=0&title=%D0%9A%D0%BE%D1%82%D0%B5%D0%B4%D0%B6%20%231&showCalendars=0&showTz=0&src=cWkxazZuMjMxMWJiMWZhamxyYmJ1MmUyMjUzZjRrOGtAaW1wb3J0LmNhbGVuZGFyLmdvb2dsZS5jb20&color=%23f09300" style="border:solid 1px #777" width="800" height="600" frameborder="0" scrolling="no"></iframe>'
+  },
+  2: {
+    title: 'Календар вільних для бронювання дат в Котеджі #2',
+    iframe: '<iframe src="https://calendar.google.com/calendar/embed?height=600&wkst=2&ctz=Europe%2FKiev&showPrint=0&showCalendars=0&showTz=0&title=%D0%9A%D0%BE%D1%82%D0%B5%D0%B4%D0%B6%20%231&src=NHZpa2hmaWwzY2JoaGtxbmVnaWlhcWtrZjMwa2NoY25AaW1wb3J0LmNhbGVuZGFyLmdvb2dsZS5jb20&color=%23f09300" style="border:solid 1px #777" width="800" height="600" frameborder="0" scrolling="no"></iframe>'
+  }
+};
+
+function openCalendar(id){
+  if(!calendarLightbox || !calendarLightboxContent) return;
+  const data = calendarInfo[id];
+  if(!data) return;
+  calendarLightboxContent.innerHTML = `
+    <article class="calendar-card">
+      <h3>${data.title}</h3>
+      ${data.iframe}
+    </article>`;
+  calendarLightbox.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeCalendar(){
+  if(!calendarLightbox || !calendarLightboxContent) return;
+  calendarLightbox.classList.remove('open');
+  calendarLightboxContent.innerHTML = '';
+  document.body.style.overflow = '';
+}
+
+document.querySelectorAll('.calendar-btn').forEach(btn => {
+  btn.addEventListener('click', () => openCalendar(btn.dataset.cottage));
+});
+calendarLightboxClose?.addEventListener('click', closeCalendar);
+calendarLightbox?.addEventListener('click', (e) => { if(e.target === calendarLightbox) closeCalendar(); });
+document.addEventListener('keydown', (e) => { if(e.key === 'Escape' && calendarLightbox?.classList.contains('open')) closeCalendar(); });
+
 // Хелпер для Viber/Telegram (за потреби)
