@@ -436,11 +436,11 @@ const calendarLightboxClose = document.getElementById('calendarLightboxClose');
 const calendarInfo = {
   1: {
     title: 'Календар вільних для бронювання дат в Котеджі #1',
-    iframe: '<iframe src="https://calendar.google.com/calendar/embed?height=600&wkst=2&ctz=Europe%2FKiev&showPrint=0&title=%D0%9A%D0%BE%D1%82%D0%B5%D0%B4%D0%B6%20%231&showCalendars=0&showTz=0&src=cWkxazZuMjMxMWJiMWZhamxyYmJ1MmUyMjUzZjRrOGtAaW1wb3J0LmNhbGVuZGFyLmdvb2dsZS5jb20&color=%23f09300" style="border:solid 1px #777" width="800" height="600" frameborder="0" scrolling="no"></iframe>'
+    iframe: '<iframe src="https://calendar.google.com/calendar/embed?height=600&wkst=2&ctz=Europe%2FKiev&showPrint=0&title=%D0%9A%D0%BE%D1%82%D0%B5%D0%B4%D0%B6%20%231&showCalendars=0&showTz=0&src=cWkxazZuMjMxMWJiMWZhamxyYmJ1MmUyMjUzZjRrOGtAaW1wb3J0LmNhbGVuZGFyLmdvb2dsZS5jb20&color=%23f09300" style="border:solid 1px #777" width="800" height="600"></iframe>'
   },
   2: {
     title: 'Календар вільних для бронювання дат в Котеджі #2',
-    iframe: '<iframe src="https://calendar.google.com/calendar/embed?height=600&wkst=2&ctz=Europe%2FKiev&showPrint=0&showCalendars=0&showTz=0&title=%D0%9A%D0%BE%D1%82%D0%B5%D0%B4%D0%B6%20%231&src=NHZpa2hmaWwzY2JoaGtxbmVnaWlhcWtrZjMwa2NoY25AaW1wb3J0LmNhbGVuZGFyLmdvb2dsZS5jb20&color=%23f09300" style="border:solid 1px #777" width="800" height="600" frameborder="0" scrolling="no"></iframe>'
+    iframe: '<iframe src="https://calendar.google.com/calendar/embed?height=600&wkst=2&ctz=Europe%2FKiev&showPrint=0&showCalendars=0&showTz=0&title=%D0%9A%D0%BE%D1%82%D0%B5%D0%B4%D0%B6%20%232&src=NHZpa2hmaWwzY2JoaGtxbmVnaWlhcWtrZjMwa2NoY25AaW1wb3J0LmNhbGVuZGFyLmdvb2dsZS5jb20&color=%23f09300" style="border:solid 1px #777" width="800" height="600"></iframe>'
   }
 };
 
