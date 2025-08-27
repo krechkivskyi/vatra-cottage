@@ -5,6 +5,7 @@
   --muted: #6b6459;
   --brand: #d64045;
   --brand-2: #8b2c34;
+  --brand-disabled: #e48386;
   --ring: rgba(214, 64, 69, 0.25);
   --shadow: 0 10px 25px rgba(0,0,0,.08);
   --radius: 16px;
@@ -287,11 +288,14 @@ section { padding: 64px 0; }
   color: var(--brand-2);
 }
 .calendar-card .fc-daygrid-day.occupied {
-  background: var(--brand);
-  border-color: var(--brand);
+  background: var(--brand-disabled);
+  border-color: var(--brand-disabled);
 }
 .calendar-card .fc-daygrid-day.occupied .fc-daygrid-day-number {
   color: #fff;
+}
+.calendar-card .fc-daygrid-day.past .fc-daygrid-day-number {
+  opacity: .3;
 }
 .calendar-card .fc-day-today .fc-daygrid-day-number {
   font-size: 2em;
@@ -319,8 +323,8 @@ section { padding: 64px 0; }
   background: var(--card);
 }
 .calendar-card .legend-item.busy span {
-  background: var(--brand);
-  border-color: var(--brand);
+  background: var(--brand-disabled);
+  border-color: var(--brand-disabled);
 }
 
 /* Contacts */
