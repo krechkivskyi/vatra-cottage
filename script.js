@@ -496,6 +496,7 @@ async function openCalendar(id){
   const busyDates = await fetchIcsEvents(url);
   const calendarEl = document.getElementById('calendar');
   const today = new Date();
+  today.setHours(0,0,0,0);
   const start = new Date(today.getFullYear(), today.getMonth(), 1);
   const end = new Date(today.getFullYear(), today.getMonth() + 12, 0);
   const calendar = new FullCalendar.Calendar(calendarEl, {
@@ -505,7 +506,7 @@ async function openCalendar(id){
     firstDay: 1,
     headerToolbar: { left: 'prev', center: 'title', right: 'next today' },
     buttonText: { today: 'Сьогодні' },
-    titleFormat: { year: 'numeric', month: 'long' },
+    titleFormat: (arg) => new Intl.DateTimeFormat('uk', { month: 'long', year: 'numeric' }).format(arg.date).replace(' р.', ''),
     validRange: { start, end },
     dayCellClassNames: (arg) => {
       const cls = [];
@@ -520,8 +521,6 @@ async function openCalendar(id){
     },
     datesSet: () => {
       placeTodayBtn(calendarEl);
-      const titleEl = calendarEl.querySelector('.fc-toolbar-title');
-      if (titleEl) titleEl.textContent = titleEl.textContent.replace(/\s*р\.$/, '');
     }
   });
   calendar.render();

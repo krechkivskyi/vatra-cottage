@@ -272,7 +272,7 @@ section { padding: 64px 0; }
 }
 .calendar-card .fc-today-wrap {
   width: 100%;
-  margin-top: 8px;
+  margin: 0 0 8px;
   text-align: left;
 }
 .calendar-card .fc-toolbar-title {
