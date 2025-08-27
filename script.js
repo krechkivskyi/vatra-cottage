@@ -466,11 +466,13 @@ function placeTodayBtn(calendarEl){
   const toolbar = calendarEl.querySelector('.fc-header-toolbar');
   const todayBtn = toolbar?.querySelector('.fc-today-button');
   if (!toolbar || !todayBtn) return;
-  let wrap = calendarEl.querySelector('.fc-today-wrap');
+  const leftChunk = toolbar.querySelector('.fc-toolbar-chunk:first-child');
+  if (!leftChunk) return;
+  let wrap = leftChunk.querySelector('.fc-today-wrap');
   if (!wrap){
     wrap = document.createElement('div');
     wrap.className = 'fc-today-wrap';
-    toolbar.after(wrap);
+    leftChunk.appendChild(wrap);
   }
   wrap.innerHTML = '';
   wrap.appendChild(todayBtn);

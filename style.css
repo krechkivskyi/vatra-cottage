@@ -257,6 +257,10 @@ section { padding: 64px 0; }
   align-items: center;
   gap: 8px;
 }
+.calendar-card .fc-header-toolbar .fc-toolbar-chunk:first-child {
+  flex-direction: column;
+  align-items: flex-start;
+}
 .calendar-card .fc-header-toolbar .fc-toolbar-chunk:nth-child(2) {
   flex: 1;
   justify-content: center;
@@ -268,9 +272,7 @@ section { padding: 64px 0; }
   color: var(--brand-2);
 }
 .calendar-card .fc-today-wrap {
-  width: 100%;
   margin-top: 8px;
-  text-align: left;
 }
 .calendar-card .fc-toolbar-title {
   font-size: 24px;
