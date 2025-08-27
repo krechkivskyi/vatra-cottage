@@ -433,6 +433,31 @@ const calendarLightbox = document.getElementById('calendarLightbox');
 const calendarLightboxContent = document.getElementById('calendarLightboxContent');
 const calendarLightboxClose = document.getElementById('calendarLightboxClose');
 
+function loadScript(src){
+  return new Promise((resolve, reject) => {
+    const s = document.createElement('script');
+    s.src = src;
+    s.onload = resolve;
+    s.onerror = reject;
+    document.head.appendChild(s);
+  });
+}
+
+let calendarLibsPromise;
+function ensureCalendarLibs(){
+  if(!calendarLibsPromise){
+    calendarLibsPromise = (async () => {
+      if(!window.ICAL) await loadScript('https://cdn.jsdelivr.net/npm/ical.js@1.4.0/build/ical.min.js');
+      if(!window.FullCalendar){
+        await loadScript('https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js');
+        await loadScript('https://cdn.jsdelivr.net/npm/@fullcalendar/icalendar@6.1.11/index.global.min.js');
+        await loadScript('https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/locales/uk.global.min.js');
+      }
+    })();
+  }
+  return calendarLibsPromise;
+}
+
 const icsLinks = {
   1: 'https://ical.booking.com/v1/export?t=efa96061-4119-4efd-8218-b047a22de77f',
   2: 'https://ical.booking.com/v1/export?t=34812d3f-ed21-4935-ab56-76452c38388f'
@@ -484,6 +509,17 @@ async function openCalendar(id){
   if(!calendarLightbox || !calendarLightboxContent) return;
   const url = icsLinks[id];
   if(!url) return;
+  try {
+    await ensureCalendarLibs();
+  } catch (e) {
+    console.error(e);
+  }
+  if(!window.FullCalendar){
+    calendarLightboxContent.innerHTML = `<article class="calendar-card"><p>Не вдалося завантажити календар.</p></article>`;
+    calendarLightbox.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    return;
+  }
   calendarLightboxContent.innerHTML = `
     <article class="calendar-card">
       <h3>Календар вільних для бронювання дат в Котеджі #${id}</h3>
