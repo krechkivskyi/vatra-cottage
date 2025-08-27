@@ -275,7 +275,7 @@ section { padding: 64px 0; }
 .calendar-card .fc-col-header-cell-cushion {
   color: var(--brand-2);
 }
-.calendar-card .fc-today-wrap {
+.calendar-card .fc-header-toolbar .fc-toolbar-chunk .fc-today-wrap {
   position: absolute;
   top: calc(100% + 8px);
   left: 0;
