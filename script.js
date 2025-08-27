@@ -438,25 +438,6 @@ const icsLinks = {
   2: 'https://ical.booking.com/v1/export?t=34812d3f-ed21-4935-ab56-76452c38388f'
 };
 
-let calendarLibsPromise;
-function loadCalendarLibs(){
-  if(calendarLibsPromise) return calendarLibsPromise;
-  const sources = [
-    'https://cdn.jsdelivr.net/npm/ical.js@1.4.0/build/ical.min.js',
-    'https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js',
-    'https://cdn.jsdelivr.net/npm/@fullcalendar/icalendar@6.1.11/index.global.min.js',
-    'https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/locales/uk.global.min.js'
-  ];
-  calendarLibsPromise = Promise.all(sources.map(src => new Promise((resolve, reject) => {
-    const s = document.createElement('script');
-    s.src = src;
-    s.onload = resolve;
-    s.onerror = reject;
-    document.head.appendChild(s);
-  })));
-  return calendarLibsPromise;
-}
-
 function dateKey(d){
   return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
 }
@@ -503,15 +484,7 @@ async function openCalendar(id){
   if(!calendarLightbox || !calendarLightboxContent) return;
   const url = icsLinks[id];
   if(!url) return;
-  try {
-    await loadCalendarLibs();
-  } catch (e) {
-    calendarLightboxContent.innerHTML = `<article class="calendar-card"><p>Не вдалося завантажити календар.</p></article>`;
-    calendarLightbox.classList.add('open');
-    document.body.style.overflow = 'hidden';
-    return;
-  }
-  if(!window.FullCalendar || !window.ICAL){
+  if (typeof FullCalendar === 'undefined' || typeof ICAL === 'undefined') {
     calendarLightboxContent.innerHTML = `<article class="calendar-card"><p>Не вдалося завантажити календар.</p></article>`;
     calendarLightbox.classList.add('open');
     document.body.style.overflow = 'hidden';
