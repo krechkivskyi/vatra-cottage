@@ -5,6 +5,7 @@
   --muted: #6b6459;
   --brand: #d64045;
   --brand-2: #8b2c34;
+  --brand-disabled: #e48386;
   --ring: rgba(214, 64, 69, 0.25);
   --shadow: 0 10px 25px rgba(0,0,0,.08);
   --radius: 16px;
@@ -232,7 +233,93 @@ section { padding: 64px 0; }
 .calendar-lightbox .close:hover { background: var(--card); }
 .calendar-card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 18px; max-width: 800px; max-height: 90vh; overflow-y: auto; }
 .calendar-card h3 { margin-top: 0; margin-bottom: 16px; }
-.calendar-card iframe { width: 100%; height: 600px; border: 0; }
+.calendar-card #calendar { width: 100%; height: 600px; }
+.calendar-card .fc {
+  --fc-border-color: #e2ddd5;
+  --fc-page-bg-color: var(--card);
+  --fc-neutral-bg-color: var(--bg);
+  --fc-button-text-color: #fff;
+  --fc-button-bg-color: var(--brand);
+  --fc-button-border-color: var(--brand);
+  --fc-button-hover-bg-color: var(--brand-2);
+  --fc-button-hover-border-color: var(--brand-2);
+  --fc-today-bg-color: rgba(214, 64, 69, 0.15);
+}
+.calendar-card .fc-header-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+  margin-bottom: 12px;
+}
+.calendar-card .fc-header-toolbar .fc-toolbar-chunk {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.calendar-card .fc-header-toolbar .fc-toolbar-chunk:nth-child(2) {
+  flex: 1;
+  justify-content: center;
+}
+.calendar-card .fc-theme-standard th {
+  background: #fdeaea;
+}
+.calendar-card .fc-col-header-cell-cushion {
+  color: var(--brand-2);
+}
+.calendar-card .fc-today-wrap {
+  width: 100%;
+  margin-top: 8px;
+  text-align: left;
+}
+.calendar-card .fc-toolbar-title {
+  font-size: 24px;
+}
+.calendar-card .fc .fc-button {
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+}
+.calendar-card .fc-daygrid-day-number {
+  color: var(--brand-2);
+}
+.calendar-card .fc-daygrid-day.occupied {
+  background: var(--brand-disabled);
+  border-color: var(--brand-disabled);
+}
+.calendar-card .fc-daygrid-day.occupied .fc-daygrid-day-number {
+  color: #fff;
+}
+.calendar-card .fc-daygrid-day.past .fc-daygrid-day-number {
+  opacity: .3;
+}
+.calendar-card .fc-day-today .fc-daygrid-day-number {
+  font-size: 2em;
+}
+.calendar-card .legend {
+  display: flex;
+  gap: 16px;
+  margin-top: 8px;
+  font-size: 14px;
+}
+.calendar-card .legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.calendar-card .legend-item span {
+  width: 16px;
+  height: 16px;
+  border: 1px solid #e2ddd5;
+  border-radius: 4px;
+  display: block;
+}
+.calendar-card .legend-item.free span {
+  background: var(--card);
+}
+.calendar-card .legend-item.busy span {
+  background: var(--brand-disabled);
+  border-color: var(--brand-disabled);
+}
 
 /* Contacts */
 .contacts { display: grid; grid-template-columns: 1.1fr .9fr; gap: 20px; }

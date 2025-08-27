@@ -432,31 +432,94 @@ document.addEventListener('keydown', (e) => { if(e.key === 'Escape' && priceLigh
 const calendarLightbox = document.getElementById('calendarLightbox');
 const calendarLightboxContent = document.getElementById('calendarLightboxContent');
 const calendarLightboxClose = document.getElementById('calendarLightboxClose');
-
-const calendarInfo = {
-  1: {
-    title: 'Календар вільних для бронювання дат в Котеджі #1',
-    iframe: '<iframe src="https://calendar.google.com/calendar/embed?height=600&wkst=2&ctz=Europe%2FKiev&showPrint=0&title=%D0%9A%D0%BE%D1%82%D0%B5%D0%B4%D0%B6%20%231&showCalendars=0&showTz=0&src=cWkxazZuMjMxMWJiMWZhamxyYmJ1MmUyMjUzZjRrOGtAaW1wb3J0LmNhbGVuZGFyLmdvb2dsZS5jb20&color=%23f09300" style="border:solid 1px #777" width="800" height="600"></iframe>'
-  },
-  2: {
-    title: 'Календар вільних для бронювання дат в Котеджі #2',
-    iframe: '<iframe src="https://calendar.google.com/calendar/embed?height=600&wkst=2&ctz=Europe%2FKiev&showPrint=0&showCalendars=0&showTz=0&title=%D0%9A%D0%BE%D1%82%D0%B5%D0%B4%D0%B6%20%232&src=NHZpa2hmaWwzY2JoaGtxbmVnaWlhcWtrZjMwa2NoY25AaW1wb3J0LmNhbGVuZGFyLmdvb2dsZS5jb20&color=%23f09300" style="border:solid 1px #777" width="800" height="600"></iframe>'
-  }
+const icsLinks = {
+  1: 'https://ical.booking.com/v1/export?t=efa96061-4119-4efd-8218-b047a22de77f',
+  2: 'https://ical.booking.com/v1/export?t=34812d3f-ed21-4935-ab56-76452c38388f'
 };
-
-function openCalendar(id){
+function dateKey(d){
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+async function fetchIcsEvents(url){
+  try {
+    const proxyUrl = `https://api.codetabs.com/v1/proxy/?quest=${encodeURIComponent(url)}`;
+    const res = await fetch(proxyUrl);
+    const text = await res.text();
+    const jcal = ICAL.parse(text);
+    const comp = new ICAL.Component(jcal);
+    const busy = new Set();
+    comp.getAllSubcomponents('vevent').forEach(v => {
+      const ev = new ICAL.Event(v);
+      let day = ev.startDate.toJSDate();
+      const end = ev.endDate.toJSDate();
+      while (day < end) {
+        busy.add(dateKey(day));
+        day.setDate(day.getDate() + 1);
+      }
+    });
+    return busy;
+  } catch (e) {
+    console.error('Не вдалося завантажити календар', e);
+    return new Set();
+  }
+}
+function placeTodayBtn(calendarEl){
+  const toolbar = calendarEl.querySelector('.fc-header-toolbar');
+  const todayBtn = toolbar?.querySelector('.fc-today-button');
+  if (!toolbar || !todayBtn) return;
+  let wrap = calendarEl.querySelector('.fc-today-wrap');
+  if (!wrap){
+    wrap = document.createElement('div');
+    wrap.className = 'fc-today-wrap';
+    toolbar.after(wrap);
+  }
+  wrap.innerHTML = '';
+  wrap.appendChild(todayBtn);
+}
+async function openCalendar(id){
   if(!calendarLightbox || !calendarLightboxContent) return;
-  const data = calendarInfo[id];
-  if(!data) return;
+  const url = icsLinks[id];
+  if(!url) return;
   calendarLightboxContent.innerHTML = `
     <article class="calendar-card">
-      <h3>${data.title}</h3>
-      ${data.iframe}
+      <h3>Календар вільних для бронювання дат в Котеджі #${id}</h3>
+      <div id="calendar"></div>
+      <div class="legend"><div class="legend-item free"><span></span> Вільно</div><div class="legend-item busy"><span></span> Зайнято</div></div>
     </article>`;
   calendarLightbox.classList.add('open');
   document.body.style.overflow = 'hidden';
+  const busyDates = await fetchIcsEvents(url);
+  const calendarEl = document.getElementById('calendar');
+  const today = new Date();
+  const start = new Date(today.getFullYear(), today.getMonth(), 1);
+  const end = new Date(today.getFullYear(), today.getMonth() + 12, 0);
+  const calendar = new FullCalendar.Calendar(calendarEl, {
+    initialView: 'dayGridMonth',
+    height: 600,
+    locale: 'uk',
+    firstDay: 1,
+    headerToolbar: { left: 'prev', center: 'title', right: 'next today' },
+    buttonText: { today: 'Сьогодні' },
+    titleFormat: { year: 'numeric', month: 'long' },
+    validRange: { start, end },
+    dayCellClassNames: (arg) => {
+      const cls = [];
+      if (busyDates.has(dateKey(arg.date))) cls.push('occupied');
+      const viewStart = arg.view.currentStart;
+      if (
+          arg.date < today &&
+          arg.date.getMonth() === viewStart.getMonth() &&
+          arg.date.getFullYear() === viewStart.getFullYear()
+      ) cls.push('past');
+      return cls;
+    },
+    datesSet: () => {
+      placeTodayBtn(calendarEl);
+      const titleEl = calendarEl.querySelector('.fc-toolbar-title');
+      if (titleEl) titleEl.textContent = titleEl.textContent.replace(/\s*р\.$/, '');
+    }
+  });
+  calendar.render();
 }
-
 function closeCalendar(){
   if(!calendarLightbox || !calendarLightboxContent) return;
   calendarLightbox.classList.remove('open');
