@@ -490,6 +490,7 @@ async function openCalendar(id){
   const busyDates = await fetchIcsEvents(url);
   const calendarEl = document.getElementById('calendar');
   const today = new Date();
+  today.setHours(0, 0, 0, 0);
   const start = new Date(today.getFullYear(), today.getMonth(), 1);
   const end = new Date(today.getFullYear(), today.getMonth() + 12, 0);
   const calendar = new FullCalendar.Calendar(calendarEl, {
