@@ -250,6 +250,7 @@ section { padding: 64px 0; }
   align-items: flex-start;
   justify-content: space-between;
   flex-wrap: nowrap;
+  padding-bottom: 40px;
   margin-bottom: 12px;
 }
 .calendar-card .fc-header-toolbar .fc-toolbar-chunk {
@@ -258,6 +259,7 @@ section { padding: 64px 0; }
   gap: 8px;
 }
 .calendar-card .fc-header-toolbar .fc-toolbar-chunk:first-child {
+  position: relative;
   flex-direction: column;
   align-items: flex-start;
 }
@@ -272,7 +274,14 @@ section { padding: 64px 0; }
   color: var(--brand-2);
 }
 .calendar-card .fc-today-wrap {
-  margin-top: 8px;
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+}
+.calendar-card .fc-prev-button,
+.calendar-card .fc-next-button,
+.calendar-card .fc-today-button {
+  margin: 0;
 }
 .calendar-card .fc-toolbar-title {
   font-size: 24px;
