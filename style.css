@@ -267,11 +267,6 @@ section { padding: 64px 0; }
 .calendar-card .fc-col-header-cell-cushion {
   color: var(--brand-2);
 }
-.calendar-card .fc-today-wrap {
-  width: 100%;
-  margin-top: 8px;
-  text-align: left;
-}
 .calendar-card .fc-toolbar-title {
   font-size: 24px;
 }
