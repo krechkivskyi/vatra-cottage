@@ -250,15 +250,24 @@ section { padding: 64px 0; }
   display: flex;
   align-items: center;
   justify-content: space-between;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   margin-bottom: 12px;
 }
 .calendar-card .fc-header-toolbar .fc-toolbar-chunk {
   display: flex;
   align-items: center;
   gap: 8px;
-  flex: none;
-  flex-direction: row;
+}
+.calendar-card .fc-header-toolbar .fc-toolbar-chunk:nth-child(2) {
+  flex: 1;
+  justify-content: center;
+}
+
+.calendar-card .fc-theme-standard th {
+  background: #fdeaea;
+}
+.calendar-card .fc-col-header-cell-cushion {
+  color: var(--brand-2);
 }
 .calendar-card .fc-today-wrap {
   width: 100%;
@@ -274,12 +283,15 @@ section { padding: 64px 0; }
   box-shadow: var(--shadow);
 }
 
+.calendar-card .fc-daygrid-day-number {
+  color: var(--brand-2);
+}
 .calendar-card .fc-daygrid-day.occupied {
-  background: #fdeaea;
-  border-color: #fdeaea;
+  background: var(--brand);
+  border-color: var(--brand);
 }
 .calendar-card .fc-daygrid-day.occupied .fc-daygrid-day-number {
-  color: var(--brand-2);
+  color: #fff;
 }
 .calendar-card .fc-day-today .fc-daygrid-day-number {
   font-size: 2em;
@@ -307,8 +319,8 @@ section { padding: 64px 0; }
   background: var(--card);
 }
 .calendar-card .legend-item.busy span {
-  background: #fdeaea;
-  border-color: #fdeaea;
+  background: var(--brand);
+  border-color: var(--brand);
 }
 
 /* Contacts */

@@ -466,6 +466,20 @@ async function fetchIcsEvents(url){
   }
 }
 
+function placeTodayBtn(calendarEl){
+  const toolbar = calendarEl.querySelector('.fc-header-toolbar');
+  const todayBtn = toolbar?.querySelector('.fc-today-button');
+  if (!toolbar || !todayBtn) return;
+  let wrap = calendarEl.querySelector('.fc-today-wrap');
+  if (!wrap){
+    wrap = document.createElement('div');
+    wrap.className = 'fc-today-wrap';
+    toolbar.after(wrap);
+  }
+  wrap.innerHTML = '';
+  wrap.appendChild(todayBtn);
+}
+
 async function openCalendar(id){
   if(!calendarLightbox || !calendarLightboxContent) return;
   const url = icsLinks[id];
@@ -489,22 +503,15 @@ async function openCalendar(id){
     height: 600,
     locale: 'uk',
     firstDay: 1,
-    headerToolbar: { left: 'prev', center: 'title', right: 'next today' },
+    headerToolbar: { left: 'prev', center: 'title', right: 'next' },
     buttonText: { today: 'Сьогодні' },
     titleFormat: { year: 'numeric', month: 'long' },
     titleDidMount: (arg) => { arg.el.textContent = arg.el.textContent.replace(/\s*р\.$/, ''); },
     validRange: { start, end },
-    dayCellClassNames: (arg) => busyDates.has(dateKey(arg.date)) ? ['occupied'] : []
+    dayCellClassNames: (arg) => busyDates.has(dateKey(arg.date)) ? ['occupied'] : [],
+    datesSet: () => placeTodayBtn(calendarEl)
   });
   calendar.render();
-  const toolbar = calendarEl.querySelector('.fc-header-toolbar');
-  const todayBtn = toolbar?.querySelector('.fc-today-button');
-  if (toolbar && todayBtn) {
-    const wrap = document.createElement('div');
-    wrap.className = 'fc-today-wrap';
-    wrap.appendChild(todayBtn);
-    toolbar.appendChild(wrap);
-  }
 }
 
 function closeCalendar(){
