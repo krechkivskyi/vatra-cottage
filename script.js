@@ -492,13 +492,12 @@ async function openCalendar(id){
     </article>`;
   calendarLightbox.classList.add('open');
   document.body.style.overflow = 'hidden';
-
-  const busyDates = await fetchIcsEvents(url);
   const calendarEl = document.getElementById('calendar');
   const today = new Date();
   today.setHours(0,0,0,0);
   const start = new Date(today.getFullYear(), today.getMonth(), 1);
   const end = new Date(today.getFullYear(), today.getMonth() + 12, 0);
+  let busyDates = new Set();
   const calendar = new FullCalendar.Calendar(calendarEl, {
     initialView: 'dayGridMonth',
     height: 600,
@@ -524,6 +523,13 @@ async function openCalendar(id){
     }
   });
   calendar.render();
+
+  try {
+    busyDates = await fetchIcsEvents(url);
+    calendar.rerenderDates();
+  } catch (e) {
+    console.error(e);
+  }
 }
 
 function closeCalendar(){
