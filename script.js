@@ -513,10 +513,10 @@ async function openCalendar(id){
       ) cls.push('past');
       return cls;
     },
-    datesSet: () => {
+    datesSet: (info) => {
       placeTodayBtn(calendarEl);
       const titleEl = calendarEl.querySelector('.fc-toolbar-title');
-      if (titleEl) titleEl.textContent = titleEl.textContent.replace(/\s*р\.$/, '');
+      if (titleEl) titleEl.textContent = info.view.title.replace(/\s*р\.$/, '');
     }
   });
   calendar.render();
