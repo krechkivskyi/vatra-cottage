@@ -3,9 +3,9 @@
   --card: #ffffff;
   --text: #2b2a27;
   --muted: #6b6459;
-  --brand: #d64045;
+  --brand: #ca2736;
   --brand-2: #8b2c34;
-  --brand-disabled: #e48386;
+  --brand-disabled: rgba(202, 39, 54, 0.75);
   --ring: rgba(214, 64, 69, 0.25);
   --shadow: 0 10px 25px rgba(0,0,0,.08);
   --radius: 16px;
