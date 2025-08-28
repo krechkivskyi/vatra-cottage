@@ -66,6 +66,10 @@ header {
   box-shadow: var(--shadow);
 }
 .cta.secondary { background: #fdeaea; color: var(--brand-2); }
+.cta:hover,
+.cta:focus {
+  text-decoration: none;
+}
 .hero-card { position: relative; background: var(--card); border-radius: 24px; overflow: hidden; box-shadow: var(--shadow); }
 .hero-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
@@ -297,6 +301,10 @@ section { padding: 64px 0; }
 }
 .calendar-card .fc-col-header-cell-cushion {
   color: var(--brand-2);
+}
+.calendar-card a:hover,
+.calendar-card a:focus {
+  text-decoration: none;
 }
 .calendar-card .fc-header-toolbar .fc-toolbar-chunk .fc-today-wrap {
   position: absolute;
