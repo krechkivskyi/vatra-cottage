@@ -104,6 +104,29 @@ section { padding: 64px 0; }
 .price { font-size: 18px; font-weight: 800; }
 .actions { display: flex; gap: 10px; margin-top: 4px; flex-wrap: wrap; }
 
+.price-btn,
+.calendar-btn {
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.price-btn:hover,
+.calendar-btn:hover {
+  transform: translateY(-2px) scale(1.05);
+}
+
+.price-btn:active,
+.calendar-btn:active {
+  transform: scale(0.95);
+}
+
+.price-btn:hover {
+  background: var(--brand-2);
+}
+
+.calendar-btn:hover {
+  background: #fcd5d5;
+}
+
 /* Gallery */
 .masonry { column-count: 3; column-gap: 16px; }
 .masonry img { width: 100%; margin: 0 0 16px; border-radius: 12px; box-shadow: var(--shadow); cursor: zoom-in; }
