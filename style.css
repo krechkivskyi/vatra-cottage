@@ -229,22 +229,21 @@ section { padding: 64px 0; }
 
 .calendar-lightbox { position: fixed; inset: 0; background: rgba(0,0,0,.8); display: none; align-items: center; justify-content: center; padding: 24px; z-index: 1000; }
 .calendar-lightbox.open { display: flex; }
-.calendar-lightbox .close { position: absolute; top: 20px; right: 20px; background: rgba(255,255,255,.8); border: none; border-radius: 8px; padding: 10px 14px; font-weight: 700; cursor: pointer; transition: background 0.2s; }
-.calendar-lightbox .close:hover { background: var(--card); }
+.calendar-lightbox .close { position: absolute; top: 20px; right: 20px; }
 .calendar-card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 18px; max-width: 800px; max-height: 90vh; overflow-y: auto; }
 .calendar-card h3 { margin-top: 0; margin-bottom: 16px; }
 .calendar-card #calendar { width: 100%; height: 600px; }
 .calendar-card .fc {
-  --fc-border-color: #e2ddd5;
-  --fc-page-bg-color: var(--card);
-  --fc-neutral-bg-color: var(--bg);
-  --fc-button-text-color: #fff;
-  --fc-button-bg-color: var(--brand);
-  --fc-button-border-color: var(--brand);
-  --fc-button-hover-bg-color: var(--brand-2);
-  --fc-button-hover-border-color: var(--brand-2);
-  --fc-today-bg-color: rgba(214, 64, 69, 0.15);
-}
+    --fc-border-color: #e2ddd5;
+    --fc-page-bg-color: var(--card);
+    --fc-neutral-bg-color: var(--bg);
+    --fc-button-text-color: var(--brand-2);
+    --fc-button-bg-color: #fdeaea;
+    --fc-button-border-color: #fdeaea;
+    --fc-button-hover-bg-color: #fdeaea;
+    --fc-button-hover-border-color: #fdeaea;
+    --fc-today-bg-color: rgba(214, 64, 69, 0.15);
+  }
 .calendar-card .fc-header-toolbar {
   display: flex;
   align-items: flex-start;
@@ -290,8 +289,11 @@ section { padding: 64px 0; }
   font-size: 24px;
 }
 .calendar-card .fc .fc-button {
-  border-radius: 8px;
+  border: none;
+  border-radius: 12px;
   box-shadow: var(--shadow);
+  font-weight: 700;
+  padding: 8px 16px;
 }
 .calendar-card .fc-daygrid-day-number {
   color: var(--brand-2);
