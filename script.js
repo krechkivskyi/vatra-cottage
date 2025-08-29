@@ -541,6 +541,7 @@ function setupCalendarNav(calendarEl, calendar){
     const oldView = fcRoot.querySelector('.fc-view-harness-active');
     if(!oldView) return;
     const clone = oldView.cloneNode(true);
+    clone.classList.remove('fc-view-harness-active');
     clone.classList.add('fc-slide-old');
     fcRoot.appendChild(clone);
 
@@ -608,10 +609,34 @@ function setupCalendarNav(calendarEl, calendar){
     startX = null;
   });
   fcRoot.addEventListener('pointercancel', () => { startX = null; });
+
+  fcRoot.addEventListener('touchstart', (e) => {
+    if(e.touches.length === 1){
+      startX = e.touches[0].clientX;
+    }
+  }, {passive:true});
+  fcRoot.addEventListener('touchend', (e) => {
+    if(startX === null) return;
+    const diff = e.changedTouches[0].clientX - startX;
+    if(Math.abs(diff) > 50){
+      slide(diff < 0 ? 1 : -1);
+    }
+    startX = null;
+  });
+
+  const handleKey = (e) => {
+    if(e.key === 'ArrowLeft') { e.preventDefault(); slide(-1); }
+    if(e.key === 'ArrowRight') { e.preventDefault(); slide(1); }
+  };
+  document.addEventListener('keydown', handleKey);
+  calendarEl._calKeyHandler = handleKey;
 }
 
 function closeCalendar(){
   if(!calendarLightbox || !calendarLightboxContent) return;
+  const calEl = document.getElementById('calendar');
+  const h = calEl?._calKeyHandler;
+  if(h) document.removeEventListener('keydown', h);
   calendarLightbox.classList.remove('open');
   calendarLightboxContent.innerHTML = '';
   document.body.style.overflow = '';
