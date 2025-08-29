@@ -23,6 +23,9 @@ body {
 a { color: var(--brand); text-decoration: none; }
 a:hover { text-decoration: underline; }
 
+/* Remove tap highlight on touch devices */
+a, button { -webkit-tap-highlight-color: transparent; }
+
 .container { max-width: var(--container); margin: 0 auto; padding: 0 20px; }
 
 /* Header */
