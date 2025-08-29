@@ -259,8 +259,11 @@ section { padding: 64px 0; }
     --fc-button-text-color: var(--brand-2);
     --fc-button-bg-color: #fdeaea;
     --fc-button-border-color: #fdeaea;
-    --fc-button-hover-bg-color: #fdeaea;
-    --fc-button-hover-border-color: #fdeaea;
+    --fc-button-hover-bg-color: #fcd5d5;
+    --fc-button-hover-border-color: #fcd5d5;
+    --fc-button-active-bg-color: #fcd5d5;
+    --fc-button-active-border-color: #fcd5d5;
+    --fc-button-focus-box-shadow: none;
     --fc-today-bg-color: rgba(214, 64, 69, 0.15);
   }
 .calendar-card .fc-header-toolbar {
@@ -318,6 +321,7 @@ section { padding: 64px 0; }
   font-weight: 700;
   padding: 8px 16px;
   transition: background-color 0.3s, transform 0.2s;
+  outline: none;
 }
 .calendar-card .fc .fc-button:enabled:hover {
   transform: translateY(-2px) scale(1.05);
@@ -325,6 +329,11 @@ section { padding: 64px 0; }
 }
 .calendar-card .fc .fc-button:enabled:active {
   transform: scale(0.95);
+  background: #fcd5d5;
+}
+.calendar-card .fc .fc-button:focus {
+  outline: none;
+  box-shadow: var(--shadow);
 }
 .calendar-card .fc-daygrid-day-number {
   color: var(--brand-2);
