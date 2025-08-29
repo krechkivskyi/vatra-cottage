@@ -526,12 +526,14 @@ async function openCalendar(id){
     }
   });
   calendar.render();
-
-  calendarEl.addEventListener('pointerup', (e) => {
-    if (e.pointerType === 'touch') {
-      e.target.closest('.fc-button')?.blur();
-    }
-  });
+  if (window.matchMedia('(hover: none)').matches) {
+    calendarEl.addEventListener('click', (e) => {
+      const btn = e.target.closest('.fc-button');
+      if (btn) {
+        setTimeout(() => btn.blur());
+      }
+    });
+  }
 }
 function closeCalendar(){
   if(!calendarLightbox || !calendarLightboxContent) return;
