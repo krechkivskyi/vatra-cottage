@@ -356,6 +356,10 @@ section { padding: 64px 0; }
 .calendar-card .fc-daygrid-day.past .fc-daygrid-day-number {
   opacity: .3;
 }
+.calendar-card .fc-day-today {
+  background: var(--card);
+  border-color: var(--fc-border-color);
+}
 .calendar-card .fc-day-today .fc-daygrid-day-number {
   font-size: 2em;
 }
