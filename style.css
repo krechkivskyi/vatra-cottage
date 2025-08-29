@@ -334,6 +334,10 @@ section { padding: 64px 0; }
 }
 .calendar-card .fc .fc-button:focus {
   outline: none;
+  box-shadow: none;
+}
+
+.calendar-card .fc .fc-button:focus-visible {
   box-shadow: 0 0 0 2px var(--brand-2);
 }
 .calendar-card .fc-daygrid-day-number {
