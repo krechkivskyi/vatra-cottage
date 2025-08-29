@@ -584,18 +584,30 @@ function setupCalendarNav(calendarEl, calendar){
 
   const prevBtn = fcRoot.querySelector('.fc-prev-button');
   const nextBtn = fcRoot.querySelector('.fc-next-button');
-  prevBtn?.addEventListener('click', (e) => { e.preventDefault(); slide(-1); });
-  nextBtn?.addEventListener('click', (e) => { e.preventDefault(); slide(1); });
+  prevBtn?.addEventListener('click', (e) => {
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    slide(-1);
+  });
+  nextBtn?.addEventListener('click', (e) => {
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    slide(1);
+  });
 
-  fcRoot.addEventListener('touchstart', (e) => { startX = e.touches[0].clientX; });
-  fcRoot.addEventListener('touchend', (e) => {
+  fcRoot.addEventListener('pointerdown', (e) => {
+    if(e.pointerType !== 'touch' && e.pointerType !== 'pen') return;
+    startX = e.clientX;
+  });
+  fcRoot.addEventListener('pointerup', (e) => {
     if(startX === null) return;
-    const diff = e.changedTouches[0].clientX - startX;
+    const diff = e.clientX - startX;
     if(Math.abs(diff) > 50){
       slide(diff < 0 ? 1 : -1);
     }
     startX = null;
   });
+  fcRoot.addEventListener('pointercancel', () => { startX = null; });
 }
 
 function closeCalendar(){
