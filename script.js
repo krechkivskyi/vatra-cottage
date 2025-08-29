@@ -440,6 +440,7 @@ const icsLinks = {
   1: 'https://ical.booking.com/v1/export?t=efa96061-4119-4efd-8218-b047a22de77f',
   2: 'https://ical.booking.com/v1/export?t=34812d3f-ed21-4935-ab56-76452c38388f'
 };
+const busyDatesCache = {};
 function dateKey(d){
   return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
 }
@@ -466,6 +467,9 @@ async function fetchIcsEvents(url){
     return new Set();
   }
 }
+Object.entries(icsLinks).forEach(([id, url]) => {
+  busyDatesCache[id] = fetchIcsEvents(url);
+});
 function placeTodayBtn(calendarEl){
   const toolbar = calendarEl.querySelector('.fc-header-toolbar');
   const todayBtn = toolbar?.querySelector('.fc-today-button');
@@ -493,7 +497,7 @@ async function openCalendar(id){
     </article>`;
   calendarLightbox.classList.add('open');
   document.body.style.overflow = 'hidden';
-  const busyDates = await fetchIcsEvents(url);
+  const busyDates = await (busyDatesCache[id] || (busyDatesCache[id] = fetchIcsEvents(url)));
   const calendarEl = document.getElementById('calendar');
   const today = new Date();
   today.setHours(0, 0, 0, 0);
