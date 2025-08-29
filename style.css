@@ -64,11 +64,24 @@ header {
   border: none;
   cursor: pointer;
   box-shadow: var(--shadow);
+  transition: background-color 0.3s, transform 0.2s;
 }
 .cta.secondary { background: #fdeaea; color: var(--brand-2); }
 .cta:hover,
 .cta:focus {
   text-decoration: none;
+}
+.cta:hover {
+  transform: translateY(-2px) scale(1.05);
+}
+.cta:active {
+  transform: scale(0.95);
+}
+.cta:not(.secondary):hover {
+  background: var(--brand-2);
+}
+.cta.secondary:hover {
+  background: #fcd5d5;
 }
 .hero-card { position: relative; background: var(--card); border-radius: 24px; overflow: hidden; box-shadow: var(--shadow); }
 .hero-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
@@ -108,28 +121,6 @@ section { padding: 64px 0; }
 .price { font-size: 18px; font-weight: 800; }
 .actions { display: flex; gap: 10px; margin-top: 4px; flex-wrap: wrap; }
 
-.price-btn,
-.calendar-btn {
-  transition: background-color 0.3s, transform 0.2s;
-}
-
-.price-btn:hover,
-.calendar-btn:hover {
-  transform: translateY(-2px) scale(1.05);
-}
-
-.price-btn:active,
-.calendar-btn:active {
-  transform: scale(0.95);
-}
-
-.price-btn:hover {
-  background: var(--brand-2);
-}
-
-.calendar-btn:hover {
-  background: #fcd5d5;
-}
 
 /* Gallery */
 .masonry { column-count: 3; column-gap: 16px; }
@@ -326,6 +317,14 @@ section { padding: 64px 0; }
   box-shadow: var(--shadow);
   font-weight: 700;
   padding: 8px 16px;
+  transition: background-color 0.3s, transform 0.2s;
+}
+.calendar-card .fc .fc-button:enabled:hover {
+  transform: translateY(-2px) scale(1.05);
+  background: #fcd5d5;
+}
+.calendar-card .fc .fc-button:enabled:active {
+  transform: scale(0.95);
 }
 .calendar-card .fc-daygrid-day-number {
   color: var(--brand-2);
