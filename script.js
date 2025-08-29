@@ -530,7 +530,74 @@ async function openCalendar(id){
     }
   });
   calendar.render();
+  setupCalendarNav(calendarEl, calendar);
 }
+
+function setupCalendarNav(calendarEl, calendar){
+  const fcRoot = calendarEl.querySelector('.fc');
+  if(!fcRoot) return;
+  let startX = null;
+  function slide(dir){
+    const oldView = fcRoot.querySelector('.fc-view-harness-active');
+    if(!oldView) return;
+    const clone = oldView.cloneNode(true);
+    clone.classList.add('fc-slide-old');
+    fcRoot.appendChild(clone);
+
+    const titleEl = fcRoot.querySelector('.fc-toolbar-title');
+    const titleParent = titleEl?.parentElement;
+    const titleClone = titleEl?.cloneNode(true);
+    if(titleClone && titleParent){
+      titleClone.classList.add('fc-title-old');
+      titleParent.appendChild(titleClone);
+    }
+
+    calendar[dir > 0 ? 'next' : 'prev']();
+
+    const newView = fcRoot.querySelector('.fc-view-harness-active');
+    if(newView){
+      newView.classList.add('fc-slide-new');
+      newView.style.transform = `translateX(${dir * 100}%)`;
+    }
+    if(titleEl){
+      titleEl.style.transform = `translateX(${dir * 100}%)`;
+    }
+
+    requestAnimationFrame(() => {
+      clone.style.transform = `translateX(${dir * -100}%)`;
+      if(newView) newView.style.transform = 'translateX(0)';
+      if(titleClone) titleClone.style.transform = `translateX(${dir * -100}%)`;
+      if(titleEl) titleEl.style.transform = 'translateX(0)';
+    });
+
+    const cleanup = () => {
+      clone.remove();
+      titleClone?.remove();
+      if(newView){
+        newView.classList.remove('fc-slide-new');
+        newView.style.transform = '';
+      }
+      if(titleEl) titleEl.style.transform = '';
+    };
+    clone.addEventListener('transitionend', cleanup, { once: true });
+  }
+
+  const prevBtn = fcRoot.querySelector('.fc-prev-button');
+  const nextBtn = fcRoot.querySelector('.fc-next-button');
+  prevBtn?.addEventListener('click', (e) => { e.preventDefault(); slide(-1); });
+  nextBtn?.addEventListener('click', (e) => { e.preventDefault(); slide(1); });
+
+  fcRoot.addEventListener('touchstart', (e) => { startX = e.touches[0].clientX; });
+  fcRoot.addEventListener('touchend', (e) => {
+    if(startX === null) return;
+    const diff = e.changedTouches[0].clientX - startX;
+    if(Math.abs(diff) > 50){
+      slide(diff < 0 ? 1 : -1);
+    }
+    startX = null;
+  });
+}
+
 function closeCalendar(){
   if(!calendarLightbox || !calendarLightboxContent) return;
   calendarLightbox.classList.remove('open');

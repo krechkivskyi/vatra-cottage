@@ -254,7 +254,29 @@ section { padding: 64px 0; }
 .calendar-lightbox .close:hover { background: var(--card); }
 .calendar-card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 18px; max-width: 800px; max-height: 90vh; overflow-y: auto; }
 .calendar-card h3 { margin-top: 0; margin-bottom: 16px; }
-.calendar-card #calendar { width: 100%; height: 600px; }
+.calendar-card #calendar { width: 100%; height: 600px; position: relative; overflow: hidden; }
+.calendar-card #calendar::before,
+.calendar-card #calendar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 24px;
+  pointer-events: none;
+  z-index: 2;
+}
+.calendar-card #calendar::before { left: 0; background: linear-gradient(to right, var(--card), rgba(255,255,255,0)); }
+.calendar-card #calendar::after { right: 0; background: linear-gradient(to left, var(--card), rgba(255,255,255,0)); }
+.calendar-card #calendar .fc { position: relative; }
+.calendar-card #calendar .fc-slide-old,
+.calendar-card #calendar .fc-slide-new {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  transition: transform 0.3s ease;
+}
+.calendar-card #calendar .fc-slide-old { pointer-events: none; }
 .calendar-card .fc {
     --fc-border-color: #e2ddd5;
     --fc-page-bg-color: var(--card);
@@ -316,6 +338,33 @@ section { padding: 64px 0; }
 }
 .calendar-card .fc-toolbar-title {
   font-size: 24px;
+  position: relative;
+  overflow: hidden;
+}
+.calendar-card .fc-toolbar-title::before,
+.calendar-card .fc-toolbar-title::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 16px;
+  pointer-events: none;
+  background: linear-gradient(to right, var(--card), rgba(255,255,255,0));
+}
+.calendar-card .fc-toolbar-title::after {
+  right: 0;
+  left: auto;
+  transform: scaleX(-1);
+}
+.calendar-card .fc-title-old,
+.calendar-card .fc-toolbar-title {
+  transition: transform 0.3s ease;
+}
+.calendar-card .fc-title-old {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
 }
 .calendar-card .fc .fc-button {
   border: none;
