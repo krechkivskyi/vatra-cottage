@@ -1,7 +1,11 @@
-// Поточний рік у футері
+// Роки у футері
 document.addEventListener('DOMContentLoaded', () => {
   const y = document.getElementById('year');
-  if (y) y.textContent = new Date().getFullYear();
+  if (y) {
+    const startYear = 2006;
+    const currentYear = new Date().getFullYear();
+    y.textContent = currentYear === startYear ? String(startYear) : `${startYear}-${currentYear}`;
+  }
 });
 
 // Мобільне меню
