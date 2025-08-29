@@ -526,6 +526,12 @@ async function openCalendar(id){
     }
   });
   calendar.render();
+
+  calendarEl.addEventListener('pointerup', (e) => {
+    if (e.pointerType === 'touch') {
+      e.target.closest('.fc-button')?.blur();
+    }
+  });
 }
 function closeCalendar(){
   if(!calendarLightbox || !calendarLightboxContent) return;
