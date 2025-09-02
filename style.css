@@ -346,11 +346,12 @@ section { padding: 64px 0; }
 .calendar-card .fc-daygrid-day-top {
   display: flex;
   justify-content: flex-end;
-  align-items: center;
+  align-items: flex-start;
   height: 32px;
 }
 .calendar-card .fc-daygrid-day-number {
   color: var(--brand-2);
+  line-height: 1;
 }
 .calendar-card .fc-daygrid-day.occupied {
   background: var(--brand-disabled);
