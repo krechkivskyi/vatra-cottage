@@ -343,8 +343,15 @@ section { padding: 64px 0; }
 .calendar-card .fc .fc-button:focus-visible {
   box-shadow: 0 0 0 2px var(--brand-2);
 }
+.calendar-card .fc-daygrid-day-top {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-start;
+  height: 32px;
+}
 .calendar-card .fc-daygrid-day-number {
   color: var(--brand-2);
+  line-height: 1;
 }
 .calendar-card .fc-daygrid-day.occupied {
   background: var(--brand-disabled);
@@ -360,7 +367,8 @@ section { padding: 64px 0; }
   background: var(--card);
 }
 .calendar-card .fc-day-today .fc-daygrid-day-number {
-  font-size: 2em;
+  display: inline-block;
+  font-size: 1.5em;
 }
 .calendar-card .legend {
   display: flex;
