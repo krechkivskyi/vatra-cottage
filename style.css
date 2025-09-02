@@ -367,9 +367,7 @@ section { padding: 64px 0; }
 }
 .calendar-card .fc-day-today .fc-daygrid-day-number {
   display: inline-block;
-  font-size: 1em;
-  transform: scale(1.5);
-  transform-origin: center;
+  font-size: 1.5em;
 }
 .calendar-card .legend {
   display: flex;
