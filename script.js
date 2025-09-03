@@ -33,6 +33,23 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
   });
 });
 
+// Підсвічування пунктів меню при скролі
+const sections = document.querySelectorAll('main section[id]');
+const navLinks = document.querySelectorAll('.menu a');
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if(entry.isIntersecting){
+      const id = entry.target.getAttribute('id');
+      navLinks.forEach(link => {
+        link.classList.toggle('active', link.getAttribute('href') === `#${id}`);
+      });
+    }
+  });
+}, { threshold: 0.4 });
+
+sections.forEach(section => observer.observe(section));
+
 // Лайтбокс для галереї
 const gallery = document.getElementById('galleryGrid');
 const lightbox = document.getElementById('lightbox');

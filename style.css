@@ -43,8 +43,21 @@ header {
 .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; }
 .brand-logo { width: 28px; height: 28px; border-radius: 8px; background: linear-gradient(135deg, var(--brand-2), var(--brand)); box-shadow: var(--shadow); }
 .menu { display: flex; align-items: center; gap: 18px; }
-.menu a { font-weight: 600; color: var(--text); opacity: .9; }
+.menu a {
+  display: inline-block;
+  font-weight: 600;
+  color: var(--text);
+  opacity: .9;
+  text-decoration: none;
+  transition: color 0.3s, transform 0.3s;
+}
 .menu a.active { color: var(--brand); }
+.menu a:hover,
+.menu a:focus,
+.menu a:active {
+  text-decoration: none;
+  transform: scale(1.1);
+}
 .hamburger { display: none; width: 40px; height: 40px; border: 1px solid #e2ddd5; border-radius: 10px; background: var(--card); align-items: center; justify-content: center; }
 
 /* Hero */
