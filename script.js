@@ -249,8 +249,7 @@ function formatDate(str){
 }
 
 function formatBookingScore(r){
-  const score = r * 2;
-  return score === 10 ? '10' : score.toFixed(1).replace('.', ',');
+  return Number.isInteger(r) ? String(r) : r.toFixed(1).replace('.', ',');
 }
 
 function reviewHTML(r, full=false){
