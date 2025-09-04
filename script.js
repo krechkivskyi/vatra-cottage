@@ -209,7 +209,7 @@ document.querySelectorAll('.card-gallery').forEach(gal => {
 });
 
 // Відгуки гостей (можна додати більше за потреби)
-const allReviews = [
+  const allReviews = [
   { source: 'google', author: 'Іван', date: '2024-04-03', rating: 5, text: 'Чудовий відпочинок! Чисто і затишно.' },
   { source: 'booking', author: 'Марія', date: '2024-04-10', rating: 4.8, text: 'Сподобалося місце, є все необхідне. Власники дуже привітні і завжди готові допомогти. Номер чистий, ліжка зручні, а з вікна відкривається прекрасний вид на гори. Особливо сподобалась тераса, де ми щоранку пили каву. До центру містечка кілька хвилин ходьби, але навколо тиша й спокій, що дає змогу відпочити від міської метушні. Обовʼязково приїдемо ще!' },
   { source: 'booking', author: 'Олег', date: '2024-05-05', rating: 5, text: 'Дуже гостинні господарі та гарна природа.' },
@@ -222,14 +222,26 @@ const allReviews = [
   { source: 'google', author: 'Роман', date: '2024-07-10', rating: 4, text: 'Добре місце для сімейного відпочинку.' }
 ];
 
+// Рейтинги для відображення у підсумку (можна змінювати вручну)
+const summaryRatings = {
+  google: 4.8,
+  booking: 4.6
+};
+
 function getRandomReviews(count){
   const shuffled = allReviews.slice().sort(() => Math.random() - 0.5);
   return shuffled.slice(0, Math.min(count, shuffled.length));
 }
 
 function renderStars(r){
-  const full = Math.round(r);
-  return '★'.repeat(full) + '☆'.repeat(5 - full);
+  const stars = [];
+  for(let i = 1; i <= 5; i++){
+    let fill = 0;
+    if(r >= i) fill = 100;
+    else if(r + 1 > i) fill = Math.round((r - (i - 1)) * 100);
+    stars.push(`<span class="star" style="--fill:${fill}%;">★</span>`);
+  }
+  return stars.join('');
 }
 
 function formatDate(str){
@@ -237,8 +249,7 @@ function formatDate(str){
 }
 
 function formatBookingScore(r){
-  const score = r * 2;
-  return score === 10 ? '10' : score.toFixed(1).replace('.', ',');
+  return Number.isInteger(r) ? String(r) : r.toFixed(1).replace('.', ',');
 }
 
 function reviewHTML(r, full=false){
@@ -348,25 +359,15 @@ function renderReviews(){
     });
   }
 
-  const stats = {};
-  let total = 0;
-  allReviews.forEach(r => {
-    total += r.rating;
-    stats[r.source] = stats[r.source] || {sum:0,count:0};
-    stats[r.source].sum += r.rating;
-    stats[r.source].count++;
-  });
-  const overall = (total / allReviews.length).toFixed(1);
-  const sourcesHtml = Object.keys(stats).map(src => {
-    const avg = (stats[src].sum / stats[src].count).toFixed(1);
+  const sourcesHtml = Object.entries(summaryRatings).map(([src, rating]) => {
     const label = src === 'google' ? 'Google' : 'Booking.com';
     const icon = src === 'google' ? 'images/Google_Icon_2025.svg' : 'images/Booking.com_Icon_2022.svg';
-    return `<div class="source-rating"><img class="source-icon" src="${icon}" alt="${label}" />${label} ${avg}</div>`;
+    const ratingHtml = src === 'google'
+      ? `${rating.toFixed(1)} <span class="stars">${renderStars(rating)}</span>`
+      : `<div class="booking-rating">${formatBookingScore(rating)}</div>`;
+    return `<div class="source-rating"><img class="source-icon" src="${icon}" alt="${label}" />${label} ${ratingHtml}</div>`;
   }).join('');
-  summary.innerHTML = `
-    <div class="source-ratings">${sourcesHtml}</div>
-    <div class="overall">Загальний рейтинг <strong>${overall}</strong> <span class="stars">${renderStars(overall)}</span></div>
-  `;
+  summary.innerHTML = `<div class="source-ratings">${sourcesHtml}</div>`;
 }
 
 document.addEventListener('DOMContentLoaded', renderReviews);
