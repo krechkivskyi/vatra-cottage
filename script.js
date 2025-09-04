@@ -528,7 +528,7 @@ async function openCalendar(id){
   if(!url) return;
   calendarLightboxContent.innerHTML = `
     <article class="calendar-card">
-      <h3>Календар вільних для бронювання дат в Котеджі #${id}</h3>
+      <h3>Календар Котеджу #${id}</h3>
       <div id="calendar"></div>
       <div class="legend"><div class="legend-item free"><span></span> Вільно</div><div class="legend-item busy"><span></span> Зайнято</div></div>
     </article>`;
