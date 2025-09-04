@@ -394,6 +394,25 @@ reviewLightboxClose?.addEventListener('click', closeFullReview);
 reviewLightbox?.addEventListener('click', (e) => { if(e.target === reviewLightbox) closeFullReview(); });
 document.addEventListener('keydown', (e) => { if(e.key === 'Escape' && reviewLightbox?.classList.contains('open')) closeFullReview(); });
 
+// FAQ modal
+const faqBtn = document.getElementById('faqBtn');
+const faqLightbox = document.getElementById('faqLightbox');
+const faqLightboxClose = document.getElementById('faqLightboxClose');
+
+function openFaq(){
+  faqLightbox?.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeFaq(){
+  faqLightbox?.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+faqBtn?.addEventListener('click', openFaq);
+faqLightboxClose?.addEventListener('click', closeFaq);
+faqLightbox?.addEventListener('click', (e) => { if(e.target === faqLightbox) closeFaq(); });
+document.addEventListener('keydown', (e) => { if(e.key === 'Escape' && faqLightbox?.classList.contains('open')) closeFaq(); });
+
 // Price modal
 const priceLightbox = document.getElementById('priceLightbox');
 const priceLightboxContent = document.getElementById('priceLightboxContent');

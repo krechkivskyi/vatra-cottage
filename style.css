@@ -268,6 +268,15 @@ section { padding: 64px 0; }
 .review-lightbox .close:hover { background: var(--card); }
 .review-lightbox .review-card { max-width: 600px; max-height: 85vh; overflow-y: auto; }
 
+.faq-lightbox { position: fixed; inset: 0; background: rgba(0,0,0,.8); display: none; align-items: center; justify-content: center; padding: 24px; z-index: 1000; }
+.faq-lightbox.open { display: flex; }
+.faq-lightbox .close { position: absolute; top: 20px; right: 20px; background: rgba(255,255,255,.8); border: none; border-radius: 8px; padding: 10px 14px; font-weight: 700; cursor: pointer; transition: background 0.2s; }
+.faq-lightbox .close:hover { background: var(--card); }
+.faq-card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 18px; max-width: 600px; max-height: 85vh; overflow-y: auto; }
+.faq-card h3 { margin-top: 0; }
+.faq-item { margin-bottom: 16px; }
+.faq-item:last-child { margin-bottom: 0; }
+
 .price-lightbox { position: fixed; inset: 0; background: rgba(0,0,0,.8); display: none; align-items: center; justify-content: center; padding: 24px; z-index: 1000; }
 .price-lightbox.open { display: flex; }
 .price-lightbox .close { position: absolute; top: 20px; right: 20px; background: rgba(255,255,255,.8); border: none; border-radius: 8px; padding: 10px 14px; font-weight: 700; cursor: pointer; transition: background 0.2s; }
