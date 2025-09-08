@@ -290,7 +290,7 @@ section { padding: 64px 0; }
   cursor: pointer;
 }
 .faq-arrow { transition: transform 0.3s; }
-.faq-answer { overflow: hidden; max-height: 0; margin: 0; transition: max-height 0.3s ease, margin 0.3s ease; }
+.faq-answer { overflow: hidden; max-height: 0; margin: 0; transition: max-height 0.3s ease, margin 0.3s ease; cursor: pointer; }
 .faq-item.open .faq-answer { margin: 8px 0 12px; }
 .faq-item.open .faq-arrow { transform: rotate(180deg); }
 

@@ -413,43 +413,46 @@ faqLightboxClose?.addEventListener('click', closeFaq);
 faqLightbox?.addEventListener('click', (e) => { if(e.target === faqLightbox) closeFaq(); });
 document.addEventListener('keydown', (e) => { if(e.key === 'Escape' && faqLightbox?.classList.contains('open')) closeFaq(); });
 
-document.querySelectorAll('.faq-question').forEach(btn => {
-  btn.addEventListener('click', () => {
-    const item = btn.closest('.faq-item');
+document.querySelectorAll('.faq-item').forEach(item => {
+  const btn = item.querySelector('.faq-question');
+  const answer = item.querySelector('.faq-answer');
+  if (!btn || !answer) return;
+
+  function toggle() {
     const expanded = btn.getAttribute('aria-expanded') === 'true';
     btn.setAttribute('aria-expanded', String(!expanded));
-    item?.classList.toggle('open', !expanded);
-    const answer = item?.querySelector('.faq-answer');
-    if (answer) {
-      if (!expanded) {
-        answer.setAttribute('aria-hidden', 'false');
-        answer.style.maxHeight = answer.scrollHeight + 'px';
-        answer.addEventListener(
-          'transitionend',
-          (e) => {
-            if (e.propertyName === 'max-height') {
-              answer.style.maxHeight = 'none';
-            }
-          },
-          { once: true }
-        );
-      } else {
-        answer.style.maxHeight = answer.scrollHeight + 'px';
-        requestAnimationFrame(() => {
-          answer.style.maxHeight = '0';
-        });
-        answer.addEventListener(
-          'transitionend',
-          (e) => {
-            if (e.propertyName === 'max-height') {
-              answer.setAttribute('aria-hidden', 'true');
-            }
-          },
-          { once: true }
-        );
-      }
+    item.classList.toggle('open', !expanded);
+    if (!expanded) {
+      answer.setAttribute('aria-hidden', 'false');
+      answer.style.maxHeight = answer.scrollHeight + 'px';
+      answer.addEventListener(
+        'transitionend',
+        (e) => {
+          if (e.propertyName === 'max-height') {
+            answer.style.maxHeight = 'none';
+          }
+        },
+        { once: true }
+      );
+    } else {
+      answer.style.maxHeight = answer.scrollHeight + 'px';
+      requestAnimationFrame(() => {
+        answer.style.maxHeight = '0';
+      });
+      answer.addEventListener(
+        'transitionend',
+        (e) => {
+          if (e.propertyName === 'max-height') {
+            answer.setAttribute('aria-hidden', 'true');
+          }
+        },
+        { once: true }
+      );
     }
-  });
+  }
+
+  btn.addEventListener('click', toggle);
+  answer.addEventListener('click', toggle);
 });
 
 // Price modal
