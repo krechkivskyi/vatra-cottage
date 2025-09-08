@@ -420,7 +420,35 @@ document.querySelectorAll('.faq-question').forEach(btn => {
     btn.setAttribute('aria-expanded', String(!expanded));
     item?.classList.toggle('open', !expanded);
     const answer = item?.querySelector('.faq-answer');
-    if(answer) answer.hidden = expanded;
+    if (answer) {
+      if (!expanded) {
+        answer.setAttribute('aria-hidden', 'false');
+        answer.style.maxHeight = answer.scrollHeight + 'px';
+        answer.addEventListener(
+          'transitionend',
+          (e) => {
+            if (e.propertyName === 'max-height') {
+              answer.style.maxHeight = 'none';
+            }
+          },
+          { once: true }
+        );
+      } else {
+        answer.style.maxHeight = answer.scrollHeight + 'px';
+        requestAnimationFrame(() => {
+          answer.style.maxHeight = '0';
+        });
+        answer.addEventListener(
+          'transitionend',
+          (e) => {
+            if (e.propertyName === 'max-height') {
+              answer.setAttribute('aria-hidden', 'true');
+            }
+          },
+          { once: true }
+        );
+      }
+    }
   });
 });
 
