@@ -579,7 +579,9 @@ document.querySelectorAll('.calendar-btn').forEach(btn => {
   btn.addEventListener('click', () => openCalendar(btn.dataset.cottage));
 });
 calendarLightboxClose?.addEventListener('click', closeCalendar);
-calendarLightbox?.addEventListener('click', (e) => { if(e.target === calendarLightbox) closeCalendar(); });
+calendarLightbox?.addEventListener('click', (e) => {
+  if (!e.target.closest('.calendar-card')) closeCalendar();
+});
 document.addEventListener('keydown', (e) => { if(e.key === 'Escape' && calendarLightbox?.classList.contains('open')) closeCalendar(); });
 
 // Хелпер для Viber/Telegram (за потреби)
