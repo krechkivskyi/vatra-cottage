@@ -274,8 +274,25 @@ section { padding: 64px 0; }
 .faq-lightbox .close:hover { background: var(--card); }
 .faq-card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 18px; max-width: 600px; max-height: 85vh; overflow-y: auto; }
 .faq-card h3 { margin-top: 0; }
-.faq-item { margin-bottom: 16px; }
-.faq-item:last-child { margin-bottom: 0; }
+.faq-item { margin-bottom: 16px; border-bottom: 1px solid #e2ddd5; }
+.faq-item:last-child { margin-bottom: 0; border-bottom: none; }
+.faq-question {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: none;
+  border: none;
+  padding: 8px 0;
+  font: inherit;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+}
+.faq-arrow { transition: transform 0.2s; }
+.faq-answer { display: none; margin: 8px 0 12px; }
+.faq-item.open .faq-answer { display: block; }
+.faq-item.open .faq-arrow { transform: rotate(180deg); }
 
 .price-lightbox { position: fixed; inset: 0; background: rgba(0,0,0,.8); display: none; align-items: center; justify-content: center; padding: 24px; z-index: 1000; }
 .price-lightbox.open { display: flex; }

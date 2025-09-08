@@ -413,6 +413,17 @@ faqLightboxClose?.addEventListener('click', closeFaq);
 faqLightbox?.addEventListener('click', (e) => { if(e.target === faqLightbox) closeFaq(); });
 document.addEventListener('keydown', (e) => { if(e.key === 'Escape' && faqLightbox?.classList.contains('open')) closeFaq(); });
 
+document.querySelectorAll('.faq-question').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const item = btn.closest('.faq-item');
+    const expanded = btn.getAttribute('aria-expanded') === 'true';
+    btn.setAttribute('aria-expanded', String(!expanded));
+    item?.classList.toggle('open', !expanded);
+    const answer = item?.querySelector('.faq-answer');
+    if(answer) answer.hidden = expanded;
+  });
+});
+
 // Price modal
 const priceLightbox = document.getElementById('priceLightbox');
 const priceLightboxContent = document.getElementById('priceLightboxContent');
