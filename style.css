@@ -454,8 +454,8 @@ section { padding: 64px 0; }
 
 /* Contacts */
 .contacts { display: grid; grid-template-columns: 1.1fr .9fr; gap: 20px; }
-.contact-info { display: grid; gap: 20px; }
-.contact-card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 18px; }
+.contact-card { display: grid; gap: 20px; background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 18px; }
+.contact-section { display: grid; gap: 12px; }
 .contact-list { display: grid; gap: 12px; font-size: 16px; }
 .contact-list a { font-weight: 600; }
 .map { border: 0; width: 100%; height: 360px; border-radius: 14px; box-shadow: var(--shadow); }
