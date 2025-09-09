@@ -454,7 +454,15 @@ section { padding: 64px 0; }
 
 /* Contacts */
 .contacts { display: grid; grid-template-columns: 1.1fr .9fr; gap: 20px; }
-.contact-card { display: grid; gap: 20px; background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 18px; }
+.contact-card {
+  display: grid;
+  gap: 20px;
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 18px;
+  grid-template-columns: repeat(2, 1fr);
+}
 .contact-section { display: grid; gap: 12px; }
 .contact-list { display: grid; gap: 12px; font-size: 16px; }
 .contact-list a { font-weight: 600; }
@@ -483,6 +491,7 @@ footer { padding: 40px 0; color: var(--muted); text-align: center; }
   section { padding: 48px 0; }
   .masonry { column-count: 1; }
   .map { height: 300px; }
+  .contact-card { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 480px){
