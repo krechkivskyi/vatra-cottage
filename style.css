@@ -461,10 +461,10 @@ section { padding: 64px 0; }
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   padding: 18px;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: auto 1fr;
 }
 .contact-section { display: grid; gap: 12px; }
-.contact-section h3 { margin: 0; }
+.contact-section h3 { margin: 0; white-space: nowrap; }
 .contact-list { display: grid; gap: 12px; font-size: 16px; }
 .contact-list a { font-weight: 600; }
 .contact-list div { display: flex; align-items: center; gap: 8px; }
@@ -493,6 +493,7 @@ footer { padding: 40px 0; color: var(--muted); text-align: center; }
   .masonry { column-count: 1; }
   .map { height: 300px; }
   .contact-card { grid-template-columns: 1fr; }
+  .contact-section h3 { white-space: normal; }
 }
 
 @media (max-width: 480px){
