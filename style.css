@@ -148,7 +148,17 @@ section { padding: 64px 0; }
 
 /* Gallery */
 .masonry { column-count: 3; column-gap: 16px; }
-.masonry img { width: 100%; margin: 0 0 16px; border-radius: 12px; box-shadow: var(--shadow); cursor: zoom-in; }
+.masonry img {
+  width: 100%;
+  margin: 0 0 16px;
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  cursor: zoom-in;
+  transition: transform 0.2s;
+}
+.masonry img:hover {
+  transform: scale(1.05);
+}
 
 /* Lightbox */
 .lightbox {
