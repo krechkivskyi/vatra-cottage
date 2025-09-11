@@ -18,7 +18,7 @@ menuBtn?.addEventListener('click', () => {
   menuBtn.setAttribute('aria-expanded', String(newState));
 });
 
-// Плавний скрол до секцій
+// Плавний скрол до секцій з урахуванням висоти хедера
 document.querySelectorAll('a[href^="#"]').forEach(a => {
   a.addEventListener('click', (e) => {
     const id = a.getAttribute('href');
@@ -26,7 +26,14 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
       const target = document.querySelector(id);
       if(target){
         e.preventDefault();
-        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+        const headerHeight = document.querySelector('header')?.offsetHeight || 0;
+        const paddingTop = parseFloat(getComputedStyle(target).paddingTop) || 0;
+        const margin = 16; // невеликий відступ під хедером
+        const elementTop = target.getBoundingClientRect().top + window.pageYOffset;
+        const offset = elementTop - headerHeight - margin + paddingTop;
+
+        window.scrollTo({ top: offset, behavior: 'smooth' });
         menu?.classList.remove('open');
       }
     }
