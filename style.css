@@ -480,14 +480,14 @@ section { padding: 64px 0; }
   align-items: center;
   gap: 8px;
   font-weight: 600;
-  color: var(--text);
+  color: var(--brand);
   text-decoration: none;
   transition: color 0.3s, transform 0.2s;
 }
 .contact-list a:hover,
 .contact-list a:focus,
 .contact-list a:active {
-  color: var(--brand);
+  color: var(--brand-2);
   text-decoration: none;
   transform: scale(1.05);
 }
