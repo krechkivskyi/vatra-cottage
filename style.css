@@ -41,7 +41,16 @@ header {
 }
 .nav { display: flex; align-items: center; justify-content: space-between; height: 64px; }
 .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; }
-.brand-logo { width: 28px; height: 28px; border-radius: 8px; background: linear-gradient(135deg, var(--brand-2), var(--brand)); box-shadow: var(--shadow); }
+.brand-logo {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, var(--brand-2), var(--brand));
+  box-shadow: var(--shadow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .menu { display: flex; align-items: center; gap: 18px; }
 .menu a {
   display: inline-block;
