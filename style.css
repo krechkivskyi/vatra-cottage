@@ -475,9 +475,23 @@ section { padding: 64px 0; }
 .contact-section { display: grid; gap: 12px; align-content: start; }
 .contact-section p { margin: 0; }
 .contact-list { display: grid; gap: 12px; font-size: 16px; }
-.contact-list a { font-weight: 600; }
-.contact-list div { display: flex; align-items: center; gap: 8px; }
-.contact-list img { width: 20px; height: 20px; }
+.contact-list a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  color: var(--text);
+  text-decoration: none;
+  transition: color 0.3s, transform 0.2s;
+}
+.contact-list a:hover,
+.contact-list a:focus,
+.contact-list a:active {
+  color: var(--brand);
+  text-decoration: none;
+  transform: scale(1.05);
+}
+.contact-list a svg { width: 20px; height: 20px; }
 .social-links { display: flex; gap: 12px; }
 .social-links img { width: 48px; height: 48px; }
 .map { border: 0; width: 100%; height: 360px; border-radius: 14px; box-shadow: var(--shadow); }
