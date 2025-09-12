@@ -845,6 +845,15 @@ async function openCalendar(id){
       placeTodayBtn(calendarEl);
       const titleEl = calendarEl.querySelector('.fc-toolbar-title');
       if (titleEl) titleEl.textContent = info.view.title.replace(/\s*р\.$/, '');
+      if (!calendarEl.querySelector('.calendar-info')) {
+        const toolbar = calendarEl.querySelector('.fc-header-toolbar');
+        if (toolbar) {
+          const notice = document.createElement('p');
+          notice.className = 'calendar-info muted';
+          notice.textContent = '* Бронювання можливе тільки по телефону.';
+          toolbar.after(notice);
+        }
+      }
     }
   });
   calendar.render();
