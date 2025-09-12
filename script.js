@@ -296,7 +296,25 @@ function renderStars(r){
 }
 
 function formatDate(str){
-  return new Date(str).toLocaleDateString('uk-UA', { day: 'numeric', month: 'short', year: 'numeric' });
+  const date = new Date(str);
+  const now = new Date();
+  const diff = date - now;
+  const rtf = new Intl.RelativeTimeFormat('uk', { numeric: 'always' });
+  const units = [
+    { unit: 'year', ms: 1000 * 60 * 60 * 24 * 365 },
+    { unit: 'month', ms: 1000 * 60 * 60 * 24 * 30 },
+    { unit: 'week', ms: 1000 * 60 * 60 * 24 * 7 },
+    { unit: 'day', ms: 1000 * 60 * 60 * 24 },
+    { unit: 'hour', ms: 1000 * 60 * 60 },
+    { unit: 'minute', ms: 1000 * 60 }
+  ];
+  for (const {unit, ms} of units) {
+    const value = diff / ms;
+    if (Math.abs(value) >= 1) {
+      return rtf.format(Math.round(value), unit);
+    }
+  }
+  return rtf.format(0, 'second');
 }
 
 function formatBookingScore(r){
