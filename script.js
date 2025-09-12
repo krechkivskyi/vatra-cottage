@@ -44,16 +44,39 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
 const sections = document.querySelectorAll('main section[id]');
 const navLinks = document.querySelectorAll('.menu a');
 
+// Відстежуємо видиму площу кожної секції та підсвічуємо ту,
+// яка займає більшу частину екрана
+const visible = new Map();
+let activeId = '';
+
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
-    if(entry.isIntersecting){
-      const id = entry.target.getAttribute('id');
-      navLinks.forEach(link => {
-        link.classList.toggle('active', link.getAttribute('href') === `#${id}`);
-      });
+    const id = entry.target.getAttribute('id');
+    if(entry.intersectionRatio > 0){
+      visible.set(id, entry.intersectionRatio);
+    } else {
+      visible.delete(id);
     }
   });
-}, { threshold: 0.4 });
+
+  let maxRatio = 0;
+  let newActive = activeId;
+  visible.forEach((ratio, id) => {
+    if(ratio > maxRatio){
+      maxRatio = ratio;
+      newActive = id;
+    }
+  });
+
+  if(newActive !== activeId){
+    activeId = newActive;
+    navLinks.forEach(link => {
+      link.classList.toggle('active', link.getAttribute('href') === `#${activeId}`);
+    });
+  }
+}, {
+  threshold: Array.from({length: 101}, (_, i) => i / 100)
+});
 
 sections.forEach(section => observer.observe(section));
 
