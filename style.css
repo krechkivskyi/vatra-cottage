@@ -522,8 +522,28 @@ footer { padding: 40px 0; color: var(--muted); text-align: center; }
   .masonry { column-count: 2; }
 }
 @media (max-width: 640px){
-  .menu { display: none; position: absolute; top: 64px; left: 0; right: 0; background: white; border-bottom: 1px solid #e2ddd5; padding: 10px 20px 16px; flex-direction: column; gap: 12px; }
-  .menu.open { display: flex; }
+  .menu {
+    display: flex;
+    position: absolute;
+    top: 64px;
+    left: 0;
+    right: 0;
+    background: white;
+    border-bottom: 1px solid #e2ddd5;
+    padding: 10px 20px 16px;
+    flex-direction: column;
+    gap: 12px;
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    pointer-events: none;
+    transition: max-height 0.3s ease, opacity 0.3s ease;
+  }
+  .menu.open {
+    max-height: 300px;
+    opacity: 1;
+    pointer-events: auto;
+  }
   .hamburger { display: inline-flex; }
   section { padding: 48px 0; }
   .masonry { column-count: 1; }
