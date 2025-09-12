@@ -810,6 +810,7 @@ async function openCalendar(id){
   calendarLightboxContent.innerHTML = `
     <article class="calendar-card">
       <h3>Календар Котеджу #${id}</h3>
+      <p class="calendar-info">Наразі бронювання через сайт недоступне. Щоб забронювати котедж, перегляньте календар, виберіть вільні дати та зателефонуйте нам.</p>
       <div id="calendar"></div>
       <div class="legend"><div class="legend-item free"><span></span> Вільно</div><div class="legend-item busy"><span></span> Зайнято</div></div>
     </article>`;
