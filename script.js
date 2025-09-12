@@ -231,8 +231,8 @@ document.querySelectorAll('.card-gallery').forEach(gal => {
 
 // Рейтинги для відображення у підсумку (можна змінювати вручну)
 const summaryRatings = {
-  google: 4.8,
-  booking: 4.6
+  google: 4.7,
+  booking: 9.4
 };
 
 function getRandomReviews(count){
