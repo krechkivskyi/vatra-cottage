@@ -476,35 +476,42 @@ const priceLightboxClose = document.getElementById('priceLightboxClose');
 const priceInfo = {
   1: {
     title: 'Ціни за добу проживання в Котеджі #1',
-    list: [
-      '6 осіб: 3600 гривень',
-      '5 осіб: 3300 гривень',
-      '4 особи: 3000 гривень',
-      '3 особи: 2700 гривень',
-      '1-2 особи: 2400 гривень'
+    table: [
+      { guests: '6 осіб', price: '3600 грн' },
+      { guests: '5 осіб', price: '3300 грн' },
+      { guests: '4 особи', price: '3000 грн' },
+      { guests: '3 особи', price: '2700 грн' },
+      { guests: '1-2 особи', price: '2400 грн' }
     ]
   },
   2: {
     title: 'Ціни за добу проживання в Котеджі #2',
-    list: [
-      '4 особи: 3000 гривень',
-      '3 особи: 2700 гривень',
-      '1-2 особи: 2400 гривень'
+    table: [
+      { guests: '4 особи', price: '3000 грн' },
+      { guests: '3 особи', price: '2700 грн' },
+      { guests: '1-2 особи', price: '2400 грн' }
     ]
   },
-  extra: 'Ціна за проживання дітей така ж, як і за проживання дорослих. Домашні улюбленці можуть проживати за додаткову плату 200 гривень за добу.'
+  notes: [
+    'Ціна за проживання дітей така ж, як і за проживання дорослих.',
+    'Домашні улюбленці можуть проживати за додаткову плату 200 гривень за добу.'
+  ]
 };
 
 function openPrices(id){
   if(!priceLightbox || !priceLightboxContent) return;
   const data = priceInfo[id];
   if(!data) return;
-  const list = data.list.map(item => `<li>${item}</li>`).join('');
+  const rows = data.table.map(r => `<tr><td>${r.guests}</td><td>${r.price}</td></tr>`).join('');
+  const notes = priceInfo.notes.map(n => `<li>${n}</li>`).join('');
   priceLightboxContent.innerHTML = `
     <article class="price-card">
       <h3>${data.title}</h3>
-      <ul class="price-list">${list}</ul>
-      <p>${priceInfo.extra}</p>
+      <table class="price-table">
+        <thead><tr><th>Кількість гостей</th><th>Ціна за добу</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+      <ul class="price-notes">${notes}</ul>
     </article>`;
   priceLightbox.classList.add('open');
   document.body.style.overflow = 'hidden';

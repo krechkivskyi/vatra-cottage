@@ -322,7 +322,10 @@ section { padding: 64px 0; }
 .price-lightbox .close:hover { background: var(--card); }
 .price-card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 18px; max-width: 600px; max-height: 85vh; overflow-y: auto; }
 .price-card h3 { margin-top: 0; }
-.price-list { margin: 16px 0; padding-left: 20px; }
+.price-table { width: 100%; border-collapse: collapse; margin: 16px 0; }
+.price-table th, .price-table td { padding: 8px 12px; border-bottom: 1px solid #e2ddd5; }
+.price-table th { background: #fdeaea; color: var(--brand-2); text-align: left; }
+.price-notes { margin-top: 16px; padding-left: 20px; }
 
 .calendar-lightbox { position: fixed; inset: 0; background: rgba(0,0,0,.8); display: flex; align-items: center; justify-content: center; padding: 24px; z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
 .calendar-lightbox.open { opacity: 1; pointer-events: auto; }
