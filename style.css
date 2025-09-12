@@ -165,13 +165,16 @@ section { padding: 64px 0; }
   position: fixed;
   inset: 0;
   background: rgba(0,0,0,.8);
-  display: none;
+  display: flex;
   align-items: center;
   justify-content: center;
   padding: 24px;
   z-index: 1000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
 }
-.lightbox.open { display: flex; }
+.lightbox.open { opacity: 1; pointer-events: auto; }
 .lightbox img { max-width: 96vw; max-height: 85vh; border-radius: 12px; box-shadow: 0 20px 60px rgba(0,0,0,.4); touch-action: none; cursor: grab; position: relative; z-index: 1; }
 .lightbox .close { position: absolute; top: 20px; right: 20px; background: rgba(255,255,255,.8); border: none; border-radius: 8px; padding: 10px 14px; font-weight: 700; cursor: pointer; transition: background 0.2s; }
 .lightbox .close:hover { background: var(--card); }
@@ -281,14 +284,14 @@ section { padding: 64px 0; }
   color: #f5a623;
 }
 
-.review-lightbox { position: fixed; inset: 0; background: rgba(0,0,0,.8); display: none; align-items: center; justify-content: center; padding: 24px; z-index: 1000; }
-.review-lightbox.open { display: flex; }
+.review-lightbox { position: fixed; inset: 0; background: rgba(0,0,0,.8); display: flex; align-items: center; justify-content: center; padding: 24px; z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+.review-lightbox.open { opacity: 1; pointer-events: auto; }
 .review-lightbox .close { position: absolute; top: 20px; right: 20px; background: rgba(255,255,255,.8); border: none; border-radius: 8px; padding: 10px 14px; font-weight: 700; cursor: pointer; transition: background 0.2s; }
 .review-lightbox .close:hover { background: var(--card); }
 .review-lightbox .review-card { max-width: 600px; max-height: 85vh; overflow-y: auto; }
 
-.faq-lightbox { position: fixed; inset: 0; background: rgba(0,0,0,.8); display: none; align-items: center; justify-content: center; padding: 24px; z-index: 1000; }
-.faq-lightbox.open { display: flex; }
+.faq-lightbox { position: fixed; inset: 0; background: rgba(0,0,0,.8); display: flex; align-items: center; justify-content: center; padding: 24px; z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+.faq-lightbox.open { opacity: 1; pointer-events: auto; }
 .faq-lightbox .close { position: absolute; top: 20px; right: 20px; background: rgba(255,255,255,.8); border: none; border-radius: 8px; padding: 10px 14px; font-weight: 700; cursor: pointer; transition: background 0.2s; }
 .faq-lightbox .close:hover { background: var(--card); }
 .faq-card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 18px; width: 100%; max-width: 800px; max-height: 85vh; overflow-y: auto; scrollbar-gutter: stable; }
@@ -313,16 +316,16 @@ section { padding: 64px 0; }
 .faq-item.open .faq-answer { margin: 8px 0 12px; }
 .faq-item.open .faq-arrow { transform: rotate(180deg); }
 
-.price-lightbox { position: fixed; inset: 0; background: rgba(0,0,0,.8); display: none; align-items: center; justify-content: center; padding: 24px; z-index: 1000; }
-.price-lightbox.open { display: flex; }
+.price-lightbox { position: fixed; inset: 0; background: rgba(0,0,0,.8); display: flex; align-items: center; justify-content: center; padding: 24px; z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+.price-lightbox.open { opacity: 1; pointer-events: auto; }
 .price-lightbox .close { position: absolute; top: 20px; right: 20px; background: rgba(255,255,255,.8); border: none; border-radius: 8px; padding: 10px 14px; font-weight: 700; cursor: pointer; transition: background 0.2s; }
 .price-lightbox .close:hover { background: var(--card); }
 .price-card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 18px; max-width: 600px; max-height: 85vh; overflow-y: auto; }
 .price-card h3 { margin-top: 0; }
 .price-list { margin: 16px 0; padding-left: 20px; }
 
-.calendar-lightbox { position: fixed; inset: 0; background: rgba(0,0,0,.8); display: none; align-items: center; justify-content: center; padding: 24px; z-index: 1000; }
-.calendar-lightbox.open { display: flex; }
+.calendar-lightbox { position: fixed; inset: 0; background: rgba(0,0,0,.8); display: flex; align-items: center; justify-content: center; padding: 24px; z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+.calendar-lightbox.open { opacity: 1; pointer-events: auto; }
 .calendar-lightbox .close { position: absolute; top: 20px; right: 20px; background: rgba(255,255,255,.8); border: none; border-radius: 8px; padding: 10px 14px; font-weight: 700; cursor: pointer; transition: background 0.2s; }
 .calendar-lightbox .close:hover { background: var(--card); }
 #calendarLightboxContent { width: 100%; display: flex; justify-content: center; }

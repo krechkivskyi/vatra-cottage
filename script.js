@@ -57,6 +57,8 @@ const observer = new IntersectionObserver((entries) => {
 
 sections.forEach(section => observer.observe(section));
 
+const MODAL_TRANSITION_MS = 300;
+
 // Лайтбокс для галереї
 const gallery = document.getElementById('galleryGrid');
 const lightbox = document.getElementById('lightbox');
@@ -100,9 +102,11 @@ function openLightbox(src, alt){
 function closeLightbox(){
   if (!lightbox || !lightboxImg) return;
   lightbox.classList.remove('open');
-  lightboxImg.src = '';
-  lbImages = [];
-  resetZoom();
+  setTimeout(() => {
+    lightboxImg.src = '';
+    lbImages = [];
+    resetZoom();
+  }, MODAL_TRANSITION_MS);
 }
 
 function openGallery(images, start=0){
@@ -393,8 +397,10 @@ function openFullReview(review){
 function closeFullReview(){
   if(!reviewLightbox || !reviewLightboxContent) return;
   reviewLightbox.classList.remove('open');
-  reviewLightboxContent.innerHTML = '';
-  document.body.style.overflow = '';
+  setTimeout(() => {
+    reviewLightboxContent.innerHTML = '';
+    document.body.style.overflow = '';
+  }, MODAL_TRANSITION_MS);
 }
 
 reviewLightboxClose?.addEventListener('click', closeFullReview);
@@ -507,8 +513,10 @@ function openPrices(id){
 function closePrices(){
   if(!priceLightbox || !priceLightboxContent) return;
   priceLightbox.classList.remove('open');
-  priceLightboxContent.innerHTML = '';
-  document.body.style.overflow = '';
+  setTimeout(() => {
+    priceLightboxContent.innerHTML = '';
+    document.body.style.overflow = '';
+  }, MODAL_TRANSITION_MS);
 }
 
 document.querySelectorAll('.price-btn').forEach(btn => {
@@ -620,8 +628,10 @@ async function openCalendar(id){
 function closeCalendar(){
   if(!calendarLightbox || !calendarLightboxContent) return;
   calendarLightbox.classList.remove('open');
-  calendarLightboxContent.innerHTML = '';
-  document.body.style.overflow = '';
+  setTimeout(() => {
+    calendarLightboxContent.innerHTML = '';
+    document.body.style.overflow = '';
+  }, MODAL_TRANSITION_MS);
 }
 
 document.querySelectorAll('.calendar-btn').forEach(btn => {
