@@ -850,7 +850,7 @@ async function openCalendar(id){
         if (toolbar) {
           const notice = document.createElement('p');
           notice.className = 'calendar-info muted';
-          notice.textContent = 'Наразі бронювання через сайт недоступне. Щоб забронювати котедж, перегляньте календар, виберіть вільні дати та зателефонуйте нам.';
+          notice.textContent = '* Бронювання можливе тільки по телефону.';
           toolbar.after(notice);
         }
       }
