@@ -810,7 +810,6 @@ async function openCalendar(id){
   calendarLightboxContent.innerHTML = `
     <article class="calendar-card">
       <h3>Календар Котеджу #${id}</h3>
-      <p class="calendar-info">Наразі бронювання через сайт недоступне. Щоб забронювати котедж, перегляньте календар, виберіть вільні дати та зателефонуйте нам.</p>
       <div id="calendar"></div>
       <div class="legend"><div class="legend-item free"><span></span> Вільно</div><div class="legend-item busy"><span></span> Зайнято</div></div>
     </article>`;
@@ -846,6 +845,15 @@ async function openCalendar(id){
       placeTodayBtn(calendarEl);
       const titleEl = calendarEl.querySelector('.fc-toolbar-title');
       if (titleEl) titleEl.textContent = info.view.title.replace(/\s*р\.$/, '');
+      if (!calendarEl.querySelector('.calendar-info')) {
+        const toolbar = calendarEl.querySelector('.fc-header-toolbar');
+        if (toolbar) {
+          const notice = document.createElement('p');
+          notice.className = 'calendar-info muted';
+          notice.textContent = 'Наразі бронювання через сайт недоступне. Щоб забронювати котедж, перегляньте календар, виберіть вільні дати та зателефонуйте нам.';
+          toolbar.after(notice);
+        }
+      }
     }
   });
   calendar.render();
