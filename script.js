@@ -86,12 +86,14 @@ const MODAL_TRANSITION_MS = 300;
 const gallery = document.getElementById('galleryGrid');
 const lightbox = document.getElementById('lightbox');
 const lightboxImg = document.getElementById('lightboxImg');
+const lightboxFrame = document.getElementById('lightboxFrame');
 const lightboxClose = document.getElementById('lightboxClose');
 const lightboxPrev = document.getElementById('lightboxPrev');
 const lightboxNext = document.getElementById('lightboxNext');
 
 let lbImages = [];
 let lbIndex = 0;
+let isLightboxTransitioning = false;
 
 let zoom = 1;
 let offsetX = 0, offsetY = 0;
@@ -116,15 +118,124 @@ function resetZoom(){
   zoom = 1; offsetX = 0; offsetY = 0; updateZoom();
 }
 
-function openLightbox(src, alt){
+function waitForTransitionEnd(element, duration = 450){
+  return new Promise(resolve => {
+    let resolved = false;
+    const done = () => {
+      if(resolved) return;
+      resolved = true;
+      element.removeEventListener('transitionend', onEnd);
+      resolve();
+    };
+    const onEnd = (event) => {
+      if(event.target === element){
+        done();
+      }
+    };
+    element.addEventListener('transitionend', onEnd);
+    setTimeout(done, duration);
+  });
+}
+
+function preloadLightboxImage(src){
+  return new Promise(resolve => {
+    if(!src){
+      resolve();
+      return;
+    }
+    if(lightboxImg && lightboxImg.src === src && lightboxImg.complete){
+      resolve();
+      return;
+    }
+    const img = new Image();
+    img.onload = () => resolve();
+    img.onerror = () => resolve();
+    img.src = src;
+  });
+}
+
+async function transitionLightboxImage(src, alt, direction = 0, isInitial = false){
+  if(!lightboxImg) return;
+  const frame = lightboxFrame;
+  const applyImage = () => {
+    lightboxImg.src = src;
+    lightboxImg.alt = alt || 'Зображення';
+    resetZoom();
+  };
+
+  if(!frame){
+    await preloadLightboxImage(src);
+    applyImage();
+    return;
+  }
+
+  if(isLightboxTransitioning){
+    return;
+  }
+  isLightboxTransitioning = true;
+  frame.classList.add('is-transitioning');
+
+  const slideTransition = 'transform 0.35s ease, opacity 0.35s ease';
+  const exitOffset = direction > 0 ? '-12%' : '12%';
+  const enterOffset = direction > 0 ? '12%' : '-12%';
+
+  try {
+    if(direction !== 0 && !isInitial){
+      frame.style.transition = '';
+      frame.style.transform = 'translateX(0)';
+      frame.style.opacity = '1';
+      frame.offsetWidth;
+      frame.style.transition = slideTransition;
+      const exitPromise = waitForTransitionEnd(frame, 420);
+      requestAnimationFrame(() => {
+        frame.style.transform = `translateX(${exitOffset})`;
+        frame.style.opacity = '0';
+      });
+      await Promise.all([exitPromise, preloadLightboxImage(src)]);
+    } else {
+      await preloadLightboxImage(src);
+    }
+
+    applyImage();
+
+    frame.style.transition = 'none';
+    frame.style.transform = direction !== 0 && !isInitial ? `translateX(${enterOffset})` : 'translateX(0)';
+    frame.style.opacity = '0';
+    frame.offsetWidth;
+    frame.style.transition = slideTransition;
+    const enterPromise = waitForTransitionEnd(frame, 420);
+    requestAnimationFrame(() => {
+      frame.style.transform = 'translateX(0)';
+      frame.style.opacity = '1';
+    });
+    await enterPromise;
+  } finally {
+    frame.style.transition = '';
+    frame.style.transform = '';
+    frame.style.opacity = '';
+    frame.classList.remove('is-transitioning');
+    isLightboxTransitioning = false;
+  }
+}
+
+function openLightbox(src, alt, direction = 0){
   if (!lightbox || !lightboxImg) return;
-  lightboxImg.src = src; lightboxImg.alt = alt || 'Зображення';
+  const isInitial = !lightbox.classList.contains('open');
   lightbox.classList.add('open');
-  resetZoom();
+  document.body.style.overflow = 'hidden';
+  transitionLightboxImage(src, alt, direction, isInitial);
 }
 function closeLightbox(){
   if (!lightbox || !lightboxImg) return;
   lightbox.classList.remove('open');
+  document.body.style.overflow = '';
+  if(lightboxFrame){
+    lightboxFrame.style.transition = '';
+    lightboxFrame.style.transform = '';
+    lightboxFrame.style.opacity = '';
+    lightboxFrame.classList.remove('is-transitioning');
+  }
+  isLightboxTransitioning = false;
   setTimeout(() => {
     lightboxImg.src = '';
     lbImages = [];
@@ -135,7 +246,7 @@ function closeLightbox(){
 function openGallery(images, start=0){
   lbImages = images;
   lbIndex = start;
-  openLightbox(lbImages[lbIndex].src, lbImages[lbIndex].alt);
+  openLightbox(lbImages[lbIndex].src, lbImages[lbIndex].alt, 0);
   const showControls = lbImages.length > 1;
   if(lightboxPrev && lightboxNext){
     lightboxPrev.style.display = showControls ? 'block' : 'none';
@@ -143,9 +254,10 @@ function openGallery(images, start=0){
   }
 }
 function showNext(step){
-  if(!lbImages.length) return;
+  if(!lbImages.length || isLightboxTransitioning) return;
   lbIndex = (lbIndex + step + lbImages.length) % lbImages.length;
-  openLightbox(lbImages[lbIndex].src, lbImages[lbIndex].alt);
+  const direction = step === 0 ? 0 : (step > 0 ? 1 : -1);
+  openLightbox(lbImages[lbIndex].src, lbImages[lbIndex].alt, direction);
 }
 
 gallery?.addEventListener('click', (e) => {
@@ -157,8 +269,16 @@ gallery?.addEventListener('click', (e) => {
     openGallery(arr, idx);
   }
 });
-lightboxPrev?.addEventListener('click', (e) => { e.stopPropagation(); showNext(-1); });
-lightboxNext?.addEventListener('click', (e) => { e.stopPropagation(); showNext(1); });
+lightboxPrev?.addEventListener('click', (e) => {
+  e.stopPropagation();
+  if(isLightboxTransitioning) return;
+  showNext(-1);
+});
+lightboxNext?.addEventListener('click', (e) => {
+  e.stopPropagation();
+  if(isLightboxTransitioning) return;
+  showNext(1);
+});
 lightboxClose?.addEventListener('click', closeLightbox);
 lightbox?.addEventListener('click', (e) => { if(e.target === lightbox) closeLightbox(); });
 document.addEventListener('keydown', (e) => {
@@ -170,7 +290,9 @@ document.addEventListener('keydown', (e) => {
 
 // Zoom & swipe controls for lightbox image
 lightbox?.addEventListener('wheel', (e) => {
+  if(!lightbox?.classList.contains('open')) return;
   e.preventDefault();
+  if(isLightboxTransitioning) return;
   const factor = e.deltaY < 0 ? 1.1 : 0.9;
   zoom = Math.min(Math.max(zoom * factor, 1), 5);
   updateZoom();
@@ -179,6 +301,7 @@ lightbox?.addEventListener('wheel', (e) => {
 lightboxImg?.addEventListener('pointerdown', (e) => {
   if(e.pointerType === 'mouse' && e.button !== 0) return;
   e.preventDefault();
+  if(isLightboxTransitioning) return;
   dragStartX = e.clientX;
   dragStartY = e.clientY;
   isDragging = true;
@@ -186,6 +309,7 @@ lightboxImg?.addEventListener('pointerdown', (e) => {
 });
 lightboxImg?.addEventListener('dragstart', (e) => e.preventDefault());
 lightboxImg?.addEventListener('pointermove', (e) => {
+  if(isLightboxTransitioning) return;
   if(!isDragging) return;
   if(zoom > 1){
     offsetX += e.clientX - dragStartX;
@@ -196,7 +320,13 @@ lightboxImg?.addEventListener('pointermove', (e) => {
   }
 });
 lightboxImg?.addEventListener('pointerup', (e) => {
-  lightboxImg.releasePointerCapture(e.pointerId);
+  if(lightboxImg.hasPointerCapture(e.pointerId)){
+    lightboxImg.releasePointerCapture(e.pointerId);
+  }
+  if(isLightboxTransitioning){
+    isDragging = false;
+    return;
+  }
   if(isDragging && zoom === 1){
     const dx = e.clientX - dragStartX;
     if(Math.abs(dx) > 50) showNext(dx < 0 ? 1 : -1);
@@ -206,6 +336,7 @@ lightboxImg?.addEventListener('pointerup', (e) => {
 lightboxImg?.addEventListener('pointercancel', () => { isDragging = false; });
 
 lightboxImg?.addEventListener('touchstart', (e) => {
+  if(isLightboxTransitioning) return;
   if(e.touches.length === 2){
     e.preventDefault();
     isDragging = false;
@@ -217,6 +348,7 @@ lightboxImg?.addEventListener('touchstart', (e) => {
   }
 }, {passive:false});
 lightboxImg?.addEventListener('touchmove', (e) => {
+  if(isLightboxTransitioning) return;
   if(e.touches.length === 2){
     e.preventDefault();
     const dist = Math.hypot(

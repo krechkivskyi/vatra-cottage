@@ -176,7 +176,30 @@ section { padding: 64px 0; }
   transition: opacity 0.3s ease;
 }
 .lightbox.open { opacity: 1; pointer-events: auto; }
-.lightbox img { max-width: 96vw; max-height: 85vh; border-radius: 12px; box-shadow: 0 20px 60px rgba(0,0,0,.4); touch-action: none; cursor: grab; position: relative; z-index: 1; }
+.lightbox-frame {
+  max-width: 96vw;
+  max-height: 85vh;
+  border-radius: 12px;
+  box-shadow: 0 20px 60px rgba(0,0,0,.4);
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.35);
+  will-change: transform, opacity;
+}
+.lightbox-frame.is-transitioning { pointer-events: none; }
+.lightbox-frame img {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  touch-action: none;
+  cursor: grab;
+  position: relative;
+  z-index: 1;
+  object-fit: contain;
+}
 .lightbox .close { position: absolute; top: 20px; right: 20px; background: rgba(255,255,255,.8); border: none; border-radius: 8px; padding: 10px 14px; font-weight: 700; cursor: pointer; transition: background 0.2s; }
 .lightbox .close:hover { background: var(--card); }
 .lightbox .prev,
