@@ -45,7 +45,7 @@ header {
   width: 28px;
   height: 28px;
   border-radius: 8px;
-  background: linear-gradient(135deg, var(--brand-2), var(--brand));
+  background: linear-gradient(135deg, var(--brand), var(--brand-2));
   box-shadow: var(--shadow);
   display: flex;
   align-items: center;
