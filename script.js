@@ -8,6 +8,57 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
+// Логіка показу номера телефону на десктопі
+const heroCallButton = document.getElementById('heroCallButton');
+if (heroCallButton) {
+  const callMediaQuery = window.matchMedia('(max-width: 768px)');
+  const callHref = heroCallButton.getAttribute('href') || '';
+  const phoneNumber = callHref.startsWith('tel:') ? callHref.replace('tel:', '') : '';
+  const originalLabel = heroCallButton.textContent?.trim() || 'Зателефонувати';
+  let isNumberShown = false;
+
+  const resetCallButton = () => {
+    heroCallButton.textContent = originalLabel;
+    heroCallButton.classList.remove('cta-number-shown');
+    isNumberShown = false;
+  };
+
+  const showPhoneNumber = () => {
+    if (!phoneNumber) return;
+    heroCallButton.textContent = phoneNumber;
+    heroCallButton.classList.add('cta-number-shown');
+    isNumberShown = true;
+  };
+
+  heroCallButton.addEventListener('click', (event) => {
+    if (callMediaQuery.matches) {
+      resetCallButton();
+      return;
+    }
+
+    event.preventDefault();
+    if (!isNumberShown) {
+      showPhoneNumber();
+    }
+  });
+
+  heroCallButton.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      heroCallButton.click();
+    }
+  });
+
+  const handleViewportChange = (event) => {
+    if (event.matches) {
+      resetCallButton();
+    }
+  };
+
+  handleViewportChange(callMediaQuery);
+  callMediaQuery.addEventListener('change', handleViewportChange);
+}
+
 // Мобільне меню
 const menuBtn = document.getElementById('menuBtn');
 const menu = document.getElementById('menu');
