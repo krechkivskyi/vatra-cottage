@@ -90,6 +90,54 @@ header {
   box-shadow: var(--shadow);
   transition: background-color 0.3s, transform 0.2s;
 }
+.cta.cta-flip {
+  perspective: 900px;
+}
+.cta-flip-inner {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-width: max-content;
+  transform-style: preserve-3d;
+  transform: rotateX(0deg);
+  transition: transform 0.45s cubic-bezier(0.4, 0.2, 0.2, 1);
+  will-change: transform;
+}
+.cta-face {
+  grid-area: 1 / 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  backface-visibility: hidden;
+  pointer-events: none;
+  transform: translateZ(0);
+  -webkit-font-smoothing: antialiased;
+}
+.cta-face-back {
+  transform: rotateX(180deg);
+}
+.cta.cta-number-shown .cta-flip-inner {
+  transform: rotateX(180deg);
+}
+.cta-number-shown {
+  background: var(--brand);
+  color: #fff;
+  border: none;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cta-flip-inner {
+    transition: none;
+  }
+}
+
+.cta-number-shown:hover,
+.cta-number-shown:focus {
+  color: #fff;
+}
 .cta.secondary { background: #fdeaea; color: var(--brand-2); }
 .cta:hover,
 .cta:focus {
