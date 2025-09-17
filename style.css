@@ -90,12 +90,44 @@ header {
   box-shadow: var(--shadow);
   transition: background-color 0.3s, transform 0.2s;
 }
+.cta.cta-flip {
+  perspective: 900px;
+}
+.cta-flip-inner {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-width: max-content;
+  transform-style: preserve-3d;
+  transition: transform 0.45s cubic-bezier(0.4, 0.2, 0.2, 1);
+}
+.cta-face {
+  grid-area: 1 / 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  backface-visibility: hidden;
+  pointer-events: none;
+}
+.cta-face-back {
+  transform: rotateY(180deg);
+}
+.cta.cta-number-shown .cta-flip-inner {
+  transform: rotateY(180deg);
+}
 .cta-number-shown {
   background: var(--brand);
   color: #fff;
   border: none;
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cta-flip-inner {
+    transition: none;
+  }
 }
 
 .cta-number-shown:hover,

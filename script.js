@@ -11,22 +11,47 @@ document.addEventListener('DOMContentLoaded', () => {
 // Логіка показу номера телефону на десктопі
 const heroCallButton = document.getElementById('heroCallButton');
 if (heroCallButton) {
-  const callMediaQuery = window.matchMedia('(max-width: 768px)');
+  const callMediaQuery = window.matchMedia('(max-width: 480px)');
   const callHref = heroCallButton.getAttribute('href') || '';
   const phoneNumber = callHref.startsWith('tel:') ? callHref.replace('tel:', '') : '';
   const originalLabel = heroCallButton.textContent?.trim() || 'Зателефонувати';
   let isNumberShown = false;
 
+  heroCallButton.classList.add('cta-flip');
+
+  const flipInner = document.createElement('span');
+  flipInner.className = 'cta-flip-inner';
+
+  const frontFace = document.createElement('span');
+  frontFace.className = 'cta-face cta-face-front';
+  frontFace.textContent = originalLabel;
+  frontFace.setAttribute('aria-hidden', 'true');
+
+  const backFace = document.createElement('span');
+  backFace.className = 'cta-face cta-face-back';
+  backFace.textContent = phoneNumber;
+  backFace.setAttribute('aria-hidden', 'true');
+
+  flipInner.append(frontFace, backFace);
+  heroCallButton.textContent = '';
+  heroCallButton.append(flipInner);
+  heroCallButton.setAttribute('aria-label', originalLabel);
+  heroCallButton.setAttribute('aria-pressed', 'false');
+
   const resetCallButton = () => {
-    heroCallButton.textContent = originalLabel;
+    frontFace.textContent = originalLabel;
     heroCallButton.classList.remove('cta-number-shown');
+    heroCallButton.setAttribute('aria-label', originalLabel);
+    heroCallButton.setAttribute('aria-pressed', 'false');
     isNumberShown = false;
   };
 
   const showPhoneNumber = () => {
     if (!phoneNumber) return;
-    heroCallButton.textContent = phoneNumber;
+    backFace.textContent = phoneNumber;
     heroCallButton.classList.add('cta-number-shown');
+    heroCallButton.setAttribute('aria-label', phoneNumber);
+    heroCallButton.setAttribute('aria-pressed', 'true');
     isNumberShown = true;
   };
 
@@ -39,6 +64,8 @@ if (heroCallButton) {
     event.preventDefault();
     if (!isNumberShown) {
       showPhoneNumber();
+    } else {
+      resetCallButton();
     }
   });
 
@@ -56,7 +83,11 @@ if (heroCallButton) {
   };
 
   handleViewportChange(callMediaQuery);
-  callMediaQuery.addEventListener('change', handleViewportChange);
+  if (typeof callMediaQuery.addEventListener === 'function') {
+    callMediaQuery.addEventListener('change', handleViewportChange);
+  } else if (typeof callMediaQuery.addListener === 'function') {
+    callMediaQuery.addListener(handleViewportChange);
+  }
 }
 
 // Мобільне меню
