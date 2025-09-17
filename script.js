@@ -102,14 +102,40 @@ let isDragging = false;
 let pinchDist = 0;
 let pinchZoom = 1;
 
+function setLightboxFrameSize(){
+  if(!lightboxFrame || !lightboxImg) return;
+  const { naturalWidth, naturalHeight } = lightboxImg;
+  if(!naturalWidth || !naturalHeight) return;
+
+  const padding = 48; // загальні відступи лайтбокса (2 * 24px)
+  const viewportWidth = Math.max(window.innerWidth - padding, 320);
+  const viewportHeight = Math.max(window.innerHeight - padding, 320);
+  const maxWidth = Math.min(viewportWidth, naturalWidth);
+  const maxHeight = Math.min(viewportHeight, naturalHeight);
+
+  const ratio = naturalWidth / naturalHeight;
+  let width = maxWidth;
+  let height = width / ratio;
+
+  if(height > maxHeight){
+    height = maxHeight;
+    width = height * ratio;
+  }
+
+  lightboxFrame.style.width = `${width}px`;
+  lightboxFrame.style.height = `${height}px`;
+}
+
 function updateZoom(){
   if(!lightboxImg) return;
   if(zoom === 1){
     offsetX = 0;
     offsetY = 0;
     lightboxImg.style.transition = 'transform 0.3s ease';
+    lightboxFrame?.classList.remove('is-zoomed');
   } else {
     lightboxImg.style.transition = 'none';
+    lightboxFrame?.classList.add('is-zoomed');
   }
   lightboxImg.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(${zoom})`;
   lightboxImg.style.cursor = zoom > 1 ? 'grab' : 'auto';
@@ -161,6 +187,8 @@ async function transitionLightboxImage(src, alt, direction = 0, isInitial = fals
     lightboxImg.src = src;
     lightboxImg.alt = alt || 'Зображення';
     resetZoom();
+    setLightboxFrameSize();
+    requestAnimationFrame(setLightboxFrameSize);
   };
 
   if(!frame){
@@ -234,6 +262,9 @@ function closeLightbox(){
     lightboxFrame.style.transform = '';
     lightboxFrame.style.opacity = '';
     lightboxFrame.classList.remove('is-transitioning');
+    lightboxFrame.style.width = '';
+    lightboxFrame.style.height = '';
+    lightboxFrame.classList.remove('is-zoomed');
   }
   isLightboxTransitioning = false;
   setTimeout(() => {
@@ -286,6 +317,12 @@ document.addEventListener('keydown', (e) => {
   if(e.key === 'Escape') closeLightbox();
   if(e.key === 'ArrowRight') showNext(1);
   if(e.key === 'ArrowLeft') showNext(-1);
+});
+
+window.addEventListener('resize', () => {
+  if(lightbox?.classList.contains('open')){
+    setLightboxFrameSize();
+  }
 });
 
 // Zoom & swipe controls for lightbox image

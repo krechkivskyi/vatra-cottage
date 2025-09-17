@@ -190,6 +190,9 @@ section { padding: 64px 0; }
   will-change: transform, opacity;
 }
 .lightbox-frame.is-transitioning { pointer-events: none; }
+.lightbox-frame.is-zoomed {
+  overflow: visible;
+}
 .lightbox-frame img {
   display: block;
   max-width: 100%;
