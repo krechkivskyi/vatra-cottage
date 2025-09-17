@@ -91,12 +91,16 @@ header {
   transition: background-color 0.3s, transform 0.2s;
 }
 .cta-number-shown {
-  background: var(--card);
-  color: var(--brand-2);
-  border: 2px solid var(--brand-2);
-  padding: 12px 36px;
+  background: var(--brand);
+  color: #fff;
+  border: none;
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
+}
+
+.cta-number-shown:hover,
+.cta-number-shown:focus {
+  color: #fff;
 }
 .cta.secondary { background: #fdeaea; color: var(--brand-2); }
 .cta:hover,
