@@ -99,7 +99,9 @@ header {
   place-items: center;
   min-width: max-content;
   transform-style: preserve-3d;
+  transform: rotateX(0deg);
   transition: transform 0.45s cubic-bezier(0.4, 0.2, 0.2, 1);
+  will-change: transform;
 }
 .cta-face {
   grid-area: 1 / 1;
@@ -109,12 +111,14 @@ header {
   width: 100%;
   backface-visibility: hidden;
   pointer-events: none;
+  transform: translateZ(0);
+  -webkit-font-smoothing: antialiased;
 }
 .cta-face-back {
-  transform: rotateY(180deg);
+  transform: rotateX(180deg);
 }
 .cta.cta-number-shown .cta-flip-inner {
-  transform: rotateY(180deg);
+  transform: rotateX(180deg);
 }
 .cta-number-shown {
   background: var(--brand);
