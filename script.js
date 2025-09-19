@@ -1001,11 +1001,28 @@ document.addEventListener('keydown', (e) => { if(e.key === 'Escape' && priceLigh
 const calendarLightbox = document.getElementById('calendarLightbox');
 const calendarLightboxContent = document.getElementById('calendarLightboxContent');
 const calendarLightboxClose = document.getElementById('calendarLightboxClose');
-const icsLinks = {
-  1: 'https://ical.booking.com/v1/export?t=efa96061-4119-4efd-8218-b047a22de77f',
-  2: 'https://ical.booking.com/v1/export?t=34812d3f-ed21-4935-ab56-76452c38388f'
-};
-const busyDatesCache = {};
+
+const CALENDAR_CONFIG_PATH = 'calendar-config.json';
+let calendarLinksPromise;
+
+function loadCalendarLinks(){
+  if(!calendarLinksPromise){
+    calendarLinksPromise = fetch(CALENDAR_CONFIG_PATH, { cache: 'no-store' })
+      .then(response => {
+        if(!response.ok){
+          throw new Error(`Не вдалося завантажити конфігурацію календаря (${response.status})`);
+        }
+        return response.json();
+      })
+      .catch(error => {
+        console.error('Помилка завантаження конфігурації календаря', error);
+        return {};
+      });
+  }
+  return calendarLinksPromise;
+}
+
+const busyDatesCache = new Map();
 function dateKey(d){
   return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
 }
@@ -1032,9 +1049,12 @@ async function fetchIcsEvents(url){
     return new Set();
   }
 }
-Object.entries(icsLinks).forEach(([id, url]) => {
-  busyDatesCache[id] = fetchIcsEvents(url);
-});
+function getBusyDates(id, url){
+  if(!busyDatesCache.has(id)){
+    busyDatesCache.set(id, fetchIcsEvents(url));
+  }
+  return busyDatesCache.get(id);
+}
 function placeTodayBtn(calendarEl){
   const toolbar = calendarEl.querySelector('.fc-header-toolbar');
   const todayBtn = toolbar?.querySelector('.fc-today-button');
@@ -1052,17 +1072,35 @@ function placeTodayBtn(calendarEl){
 }
 async function openCalendar(id){
   if(!calendarLightbox || !calendarLightboxContent) return;
-  const url = icsLinks[id];
-  if(!url) return;
+  const cottageId = String(id);
   calendarLightboxContent.innerHTML = `
     <article class="calendar-card">
-      <h3>Календар Котеджу #${id}</h3>
-      <div id="calendar"></div>
-      <div class="legend"><div class="legend-item free"><span></span> Вільно</div><div class="legend-item busy"><span></span> Зайнято</div></div>
+      <h3>Календар Котеджу #${cottageId}</h3>
+      <p class="calendar-info muted">Завантаження календаря...</p>
     </article>`;
   calendarLightbox.classList.add('open');
   document.body.style.overflow = 'hidden';
-  const busyDates = await (busyDatesCache[id] || (busyDatesCache[id] = fetchIcsEvents(url)));
+
+  const links = await loadCalendarLinks();
+  const url = links?.[cottageId];
+
+  if(!url){
+    calendarLightboxContent.innerHTML = `
+      <article class="calendar-card">
+        <h3>Календар Котеджу #${cottageId}</h3>
+        <p class="calendar-info">Календар наразі недоступний. Спробуйте пізніше або зв'яжіться з нами телефоном.</p>
+      </article>`;
+    return;
+  }
+
+  calendarLightboxContent.innerHTML = `
+    <article class="calendar-card">
+      <h3>Календар Котеджу #${cottageId}</h3>
+      <div id="calendar"></div>
+      <div class="legend"><div class="legend-item free"><span></span> Вільно</div><div class="legend-item busy"><span></span> Зайнято</div></div>
+    </article>`;
+
+  const busyDates = await getBusyDates(cottageId, url);
   const calendarEl = document.getElementById('calendar');
   const today = new Date();
   today.setHours(0, 0, 0, 0);
