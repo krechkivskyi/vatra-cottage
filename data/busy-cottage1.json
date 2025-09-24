@@ -1,0 +1,12 @@
+{
+  "updatedAt": "2025-09-24T14:45:36.091Z",
+  "events": [
+    {
+      "start": "2025-09-24T00:00:00.000Z",
+      "end": "2025-09-27T00:00:00.000Z",
+      "busy": true
+    }
+  ],
+  "source": "booking-ical-sanitized",
+  "rangeDays": 730
+}
