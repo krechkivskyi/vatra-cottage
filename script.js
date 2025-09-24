@@ -1002,58 +1002,74 @@ const calendarLightbox = document.getElementById('calendarLightbox');
 const calendarLightboxContent = document.getElementById('calendarLightboxContent');
 const calendarLightboxClose = document.getElementById('calendarLightboxClose');
 
-const CALENDAR_CONFIG_PATH = 'calendar-config.json';
-let calendarLinksPromise;
+const BUSY_DATA_PREFIX = 'data/busy-';
+const calendarDataCache = new Map();
 
-function loadCalendarLinks(){
-  if(!calendarLinksPromise){
-    calendarLinksPromise = fetch(CALENDAR_CONFIG_PATH, { cache: 'no-store' })
-      .then(response => {
-        if(!response.ok){
-          throw new Error(`Не вдалося завантажити конфігурацію календаря (${response.status})`);
-        }
-        return response.json();
-      })
-      .catch(error => {
-        console.error('Помилка завантаження конфігурації календаря', error);
-        return {};
-      });
-  }
-  return calendarLinksPromise;
-}
-
-const busyDatesCache = new Map();
 function dateKey(d){
   return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
 }
-async function fetchIcsEvents(url){
-  try {
-    const proxyUrl = `https://api.codetabs.com/v1/proxy/?quest=${encodeURIComponent(url)}`;
-    const res = await fetch(proxyUrl);
-    const text = await res.text();
-    const jcal = ICAL.parse(text);
-    const comp = new ICAL.Component(jcal);
-    const busy = new Set();
-    comp.getAllSubcomponents('vevent').forEach(v => {
-      const ev = new ICAL.Event(v);
-      let day = ev.startDate.toJSDate();
-      const end = ev.endDate.toJSDate();
-      while (day < end) {
-        busy.add(dateKey(day));
-        day.setDate(day.getDate() + 1);
-      }
-    });
-    return busy;
-  } catch (e) {
-    console.error('Не вдалося завантажити календар', e);
-    return new Set();
+
+function dateKeyFromUtcTimestamp(ts){
+  const date = new Date(ts);
+  const year = date.getUTCFullYear();
+  const month = String(date.getUTCMonth() + 1).padStart(2, '0');
+  const day = String(date.getUTCDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
+function addIntervalToBusySet(interval, target){
+  if(!interval || !interval.start || !interval.end) return;
+  const start = new Date(interval.start);
+  const end = new Date(interval.end);
+  if(Number.isNaN(start.valueOf()) || Number.isNaN(end.valueOf())) return;
+
+  const startUtc = Date.UTC(start.getUTCFullYear(), start.getUTCMonth(), start.getUTCDate());
+  let endUtc = Date.UTC(end.getUTCFullYear(), end.getUTCMonth(), end.getUTCDate());
+  if(endUtc <= startUtc){
+    endUtc = startUtc + 24 * 60 * 60 * 1000;
+  }
+
+  for(let ts = startUtc; ts < endUtc; ts += 24 * 60 * 60 * 1000){
+    target.add(dateKeyFromUtcTimestamp(ts));
   }
 }
-function getBusyDates(id, url){
-  if(!busyDatesCache.has(id)){
-    busyDatesCache.set(id, fetchIcsEvents(url));
+
+async function fetchBusyCalendar(id){
+  const response = await fetch(`${BUSY_DATA_PREFIX}${id}.json`, { cache: 'no-store' });
+  if(!response.ok){
+    throw new Error(`Помилка календаря (${response.status})`);
   }
-  return busyDatesCache.get(id);
+
+  const payload = await response.json();
+  const busySet = new Set();
+
+  if(Array.isArray(payload?.busyDates)){
+    payload.busyDates.forEach(date => {
+      if(typeof date === 'string' && date.trim()){
+        busySet.add(date.trim());
+      }
+    });
+  }
+
+  if(busySet.size === 0 && Array.isArray(payload?.intervals)){
+    payload.intervals.forEach(interval => addIntervalToBusySet(interval, busySet));
+  }
+
+  return {
+    busyDates: busySet,
+    generatedAt: typeof payload?.generatedAt === 'string' ? payload.generatedAt : null,
+  };
+}
+
+function loadBusyCalendar(id){
+  const key = String(id);
+  if(!calendarDataCache.has(key)){
+    calendarDataCache.set(key, fetchBusyCalendar(key).catch((error) => {
+      calendarDataCache.delete(key);
+      throw error;
+    }));
+  }
+  return calendarDataCache.get(key);
 }
 function placeTodayBtn(calendarEl){
   const toolbar = calendarEl.querySelector('.fc-header-toolbar');
@@ -1081,10 +1097,18 @@ async function openCalendar(id){
   calendarLightbox.classList.add('open');
   document.body.style.overflow = 'hidden';
 
-  const links = await loadCalendarLinks();
-  const url = links?.[cottageId];
+  calendarLightboxContent.innerHTML = `
+    <article class="calendar-card">
+      <h3>Календар Котеджу #${cottageId}</h3>
+      <div id="calendar"></div>
+      <div class="legend"><div class="legend-item free"><span></span> Вільно</div><div class="legend-item busy"><span></span> Зайнято</div></div>
+    </article>`;
 
-  if(!url){
+  let busyData;
+  try {
+    busyData = await loadBusyCalendar(cottageId);
+  } catch (error) {
+    console.error('Не вдалося завантажити календар', error);
     calendarLightboxContent.innerHTML = `
       <article class="calendar-card">
         <h3>Календар Котеджу #${cottageId}</h3>
@@ -1093,14 +1117,7 @@ async function openCalendar(id){
     return;
   }
 
-  calendarLightboxContent.innerHTML = `
-    <article class="calendar-card">
-      <h3>Календар Котеджу #${cottageId}</h3>
-      <div id="calendar"></div>
-      <div class="legend"><div class="legend-item free"><span></span> Вільно</div><div class="legend-item busy"><span></span> Зайнято</div></div>
-    </article>`;
-
-  const busyDates = await getBusyDates(cottageId, url);
+  const busyDates = busyData?.busyDates || new Set();
   const calendarEl = document.getElementById('calendar');
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -1142,6 +1159,19 @@ async function openCalendar(id){
     }
   });
   calendar.render();
+
+  if(busyData?.generatedAt){
+    const card = calendarLightboxContent.querySelector('.calendar-card');
+    if(card){
+      const updatedDate = new Date(busyData.generatedAt);
+      if(!Number.isNaN(updatedDate.valueOf())){
+        const note = document.createElement('p');
+        note.className = 'calendar-info muted';
+        note.textContent = `Оновлено: ${updatedDate.toLocaleString('uk-UA', { dateStyle: 'short', timeStyle: 'short' })}`;
+        card.appendChild(note);
+      }
+    }
+  }
 }
 function closeCalendar(){
   if(!calendarLightbox || !calendarLightboxContent) return;
