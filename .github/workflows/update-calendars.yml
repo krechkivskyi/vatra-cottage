@@ -5,9 +5,6 @@ on:
     - cron: '*/30 * * * *'
   workflow_dispatch:
 
-env:
-  PUBLISH_BRANCH: release
-
 permissions:
   contents: write
 
@@ -15,11 +12,8 @@ jobs:
   fetch-calendars:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout publish branch
+      - name: Checkout
         uses: actions/checkout@v4
-        with:
-          ref: ${{ env.PUBLISH_BRANCH }}
-          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -51,4 +45,3 @@ jobs:
         with:
           commit_message: 'chore: update booking calendars'
           file_pattern: data/busy-*.json
-          branch: ${{ env.PUBLISH_BRANCH }}
