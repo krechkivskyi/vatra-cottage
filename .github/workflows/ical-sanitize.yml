@@ -1,0 +1,47 @@
+name: Booking iCal sanitize
+
+on:
+  schedule:
+    - cron: '*/30 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sanitize:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci || npm install
+
+      - name: Run tests
+        run: npm run test
+
+      - name: Fetch and sanitize calendars
+        env:
+          BOOKING_CALENDAR_1: ${{ secrets.BOOKING_CALENDAR_1 }}
+          BOOKING_CALENDAR_2: ${{ secrets.BOOKING_CALENDAR_2 }}
+        run: npm run fetch:ical
+
+      - name: Commit sanitized data
+        if: success()
+        run: |
+          if [ -n "$(git status --porcelain data/)" ]; then
+            git config user.name "github-actions"
+            git config user.email "github-actions@github.com"
+            git add data/
+            git commit -m "chore: update sanitized booking calendars"
+            git push
+          else
+            echo "No sanitized calendar updates to commit."
+          fi
