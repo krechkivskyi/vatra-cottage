@@ -1,0 +1,38 @@
+name: Sync calendar availability
+
+on:
+  schedule:
+    - cron: '*/30 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout release
+        uses: actions/checkout@v4
+        with:
+          ref: release
+          fetch-depth: 0
+
+      - name: Update sanitized availability data
+        env:
+          BOOKING_CALENDAR_1: ${{ secrets.BOOKING_CALENDAR_1 }}
+          BOOKING_CALENDAR_2: ${{ secrets.BOOKING_CALENDAR_2 }}
+        run: |
+          python3 scripts/update_calendar_availability.py
+
+      - name: Commit and push changes
+        run: |
+          if [[ -n "$(git status --short data/calendar-availability.json)" ]]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add data/calendar-availability.json
+            git commit -m "Update calendar availability"
+            git push origin HEAD:release
+          else
+            echo "Немає змін для публікації."
+          fi

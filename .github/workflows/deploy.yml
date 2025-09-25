@@ -21,22 +21,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Generate calendar config
-        run: |
-          set -euo pipefail
-          if [ -z "${{ secrets.BOOKING_CALENDAR_1 }}" ]; then
-            echo "Секрет BOOKING_CALENDAR_1 не налаштований" >&2
-            exit 1
-          fi
-          if [ -z "${{ secrets.BOOKING_CALENDAR_2 }}" ]; then
-            echo "Секрет BOOKING_CALENDAR_2 не налаштований" >&2
-            exit 1
-          fi
-          jq -n \
-            --arg c1 "${{ secrets.BOOKING_CALENDAR_1 }}" \
-            --arg c2 "${{ secrets.BOOKING_CALENDAR_2 }}" \
-            '{"1": $c1, "2": $c2}' > calendar-config.json
-
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
