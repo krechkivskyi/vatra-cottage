@@ -369,6 +369,15 @@ section { padding: 64px 0; }
 .faq-lightbox.open { opacity: 1; pointer-events: auto; }
 .faq-lightbox .close { position: absolute; top: 20px; right: 20px; background: rgba(255,255,255,.8); border: none; border-radius: 8px; padding: 10px 14px; font-weight: 700; cursor: pointer; transition: background 0.2s; }
 .faq-lightbox .close:hover { background: var(--card); }
+.privacy-lightbox { position: fixed; inset: 0; background: rgba(0,0,0,.8); display: flex; align-items: center; justify-content: center; padding: 24px; z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+.privacy-lightbox.open { opacity: 1; pointer-events: auto; }
+.privacy-lightbox .close { position: absolute; top: 20px; right: 20px; background: rgba(255,255,255,.8); border: none; border-radius: 8px; padding: 10px 14px; font-weight: 700; cursor: pointer; transition: background 0.2s; }
+.privacy-lightbox .close:hover { background: var(--card); }
+.privacy-card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 24px; width: 100%; max-width: 640px; max-height: 85vh; overflow-y: auto; scrollbar-gutter: stable; }
+.privacy-card h3 { margin-top: 0; }
+.privacy-card p { margin-bottom: 0; color: var(--text); }
+.privacy-card a { color: var(--brand); text-decoration: underline; }
+.privacy-card a:hover { text-decoration: underline; }
 .faq-card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 18px; width: 100%; max-width: 800px; max-height: 85vh; overflow-y: auto; scrollbar-gutter: stable; }
 .faq-card h3 { margin-top: 0; }
 .faq-item { margin-bottom: 16px; border-bottom: 1px solid #e2ddd5; }
@@ -593,6 +602,22 @@ section { padding: 64px 0; }
 
 /* Footer */
 footer { padding: 40px 0; color: var(--muted); text-align: center; }
+footer .footer-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+footer .footer-content p {
+  margin: 0;
+}
+footer .footer-link {
+  color: var(--brand);
+}
+footer .footer-link:hover,
+footer .footer-link:focus {
+  text-decoration: underline;
+}
 
 /* Utilities */
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }

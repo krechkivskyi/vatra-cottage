@@ -890,6 +890,27 @@ faqLightboxClose?.addEventListener('click', closeFaq);
 faqLightbox?.addEventListener('click', (e) => { if(e.target === faqLightbox) closeFaq(); });
 document.addEventListener('keydown', (e) => { if(e.key === 'Escape' && faqLightbox?.classList.contains('open')) closeFaq(); });
 
+// Privacy modal
+const privacyLink = document.getElementById('privacyLink');
+const privacyLightbox = document.getElementById('privacyLightbox');
+const privacyLightboxClose = document.getElementById('privacyLightboxClose');
+
+function openPrivacy(event){
+  event?.preventDefault();
+  privacyLightbox?.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closePrivacy(){
+  privacyLightbox?.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+privacyLink?.addEventListener('click', openPrivacy);
+privacyLightboxClose?.addEventListener('click', closePrivacy);
+privacyLightbox?.addEventListener('click', (e) => { if(e.target === privacyLightbox) closePrivacy(); });
+document.addEventListener('keydown', (e) => { if(e.key === 'Escape' && privacyLightbox?.classList.contains('open')) closePrivacy(); });
+
 document.querySelectorAll('.faq-item').forEach(item => {
   const btn = item.querySelector('.faq-question');
   const answer = item.querySelector('.faq-answer');

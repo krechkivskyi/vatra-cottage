@@ -308,8 +308,30 @@
   </main>
 
   <footer>
-    <div class="container">© <span id="year"></span> Котедж Ватра. Всі права захищено.</div>
+    <div class="container footer-content">
+      <a href="#" id="privacyLink" class="footer-link">Політика приватності</a>
+      <p>© <span id="year"></span> Котедж Ватра. Всі права захищено.</p>
+    </div>
   </footer>
+
+  <div
+    class="privacy-lightbox"
+    id="privacyLightbox"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="privacyTitle"
+  >
+    <button class="close" id="privacyLightboxClose" aria-label="Закрити">Закрити ✕</button>
+    <article class="privacy-card" role="document">
+      <h3 id="privacyTitle">Політика приватності</h3>
+      <p>
+        На цьому сайті використовується Google Analytics для збору статистики відвідувань. Google може збирати інформацію через
+        файли cookie та інші технології. Детальніше:
+        <a href="https://www.google.com/policies/privacy/partners/" target="_blank" rel="noopener noreferrer">Як Google використовує дані</a>.
+        Ми не збираємо та не зберігаємо персональні дані відвідувачів.
+      </p>
+    </article>
+  </div>
 
   <!-- Structured Data (SEO) -->
   <script type="application/ld+json">
