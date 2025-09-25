@@ -1002,58 +1002,50 @@ const calendarLightbox = document.getElementById('calendarLightbox');
 const calendarLightboxContent = document.getElementById('calendarLightboxContent');
 const calendarLightboxClose = document.getElementById('calendarLightboxClose');
 
-const CALENDAR_CONFIG_PATH = 'calendar-config.json';
-let calendarLinksPromise;
+const AVAILABILITY_PATH = 'data/calendar-availability.json';
+let availabilityPromise;
 
-function loadCalendarLinks(){
-  if(!calendarLinksPromise){
-    calendarLinksPromise = fetch(CALENDAR_CONFIG_PATH, { cache: 'no-store' })
+function loadAvailability(){
+  if(!availabilityPromise){
+    availabilityPromise = fetch(AVAILABILITY_PATH, { cache: 'no-store' })
       .then(response => {
         if(!response.ok){
-          throw new Error(`Не вдалося завантажити конфігурацію календаря (${response.status})`);
+          throw new Error(`Не вдалося завантажити дані календаря (${response.status})`);
         }
         return response.json();
       })
       .catch(error => {
-        console.error('Помилка завантаження конфігурації календаря', error);
-        return {};
+        console.error('Помилка завантаження даних календаря', error);
+        return null;
       });
   }
-  return calendarLinksPromise;
+  return availabilityPromise;
 }
 
 const busyDatesCache = new Map();
 function dateKey(d){
   return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
 }
-async function fetchIcsEvents(url){
-  try {
-    const proxyUrl = `https://api.codetabs.com/v1/proxy/?quest=${encodeURIComponent(url)}`;
-    const res = await fetch(proxyUrl);
-    const text = await res.text();
-    const jcal = ICAL.parse(text);
-    const comp = new ICAL.Component(jcal);
-    const busy = new Set();
-    comp.getAllSubcomponents('vevent').forEach(v => {
-      const ev = new ICAL.Event(v);
-      let day = ev.startDate.toJSDate();
-      const end = ev.endDate.toJSDate();
-      while (day < end) {
-        busy.add(dateKey(day));
-        day.setDate(day.getDate() + 1);
-      }
-    });
-    return busy;
-  } catch (e) {
-    console.error('Не вдалося завантажити календар', e);
-    return new Set();
-  }
+function expandBusyDates(intervals){
+  const busy = new Set();
+  if(!Array.isArray(intervals)) return busy;
+  intervals.forEach(({ start, end }) => {
+    if(!start || !end) return;
+    const startDate = new Date(`${start}T00:00:00`);
+    const endDate = new Date(`${end}T00:00:00`);
+    if(Number.isNaN(startDate.valueOf()) || Number.isNaN(endDate.valueOf())) return;
+    for(const day = new Date(startDate); day < endDate; day.setDate(day.getDate() + 1)){
+      busy.add(dateKey(day));
+    }
+  });
+  return busy;
 }
-function getBusyDates(id, url){
-  if(!busyDatesCache.has(id)){
-    busyDatesCache.set(id, fetchIcsEvents(url));
+function getBusyDates(id, intervals, version){
+  const cacheKey = `${id}|${version || 'v1'}`;
+  if(!busyDatesCache.has(cacheKey)){
+    busyDatesCache.set(cacheKey, expandBusyDates(intervals));
   }
-  return busyDatesCache.get(id);
+  return busyDatesCache.get(cacheKey);
 }
 function placeTodayBtn(calendarEl){
   const toolbar = calendarEl.querySelector('.fc-header-toolbar');
@@ -1081,10 +1073,11 @@ async function openCalendar(id){
   calendarLightbox.classList.add('open');
   document.body.style.overflow = 'hidden';
 
-  const links = await loadCalendarLinks();
-  const url = links?.[cottageId];
+  const availability = await loadAvailability();
+  const version = availability?.generatedAt || availability?.updatedAt || 'v1';
+  const intervals = availability?.cottages?.[cottageId] || availability?.[cottageId];
 
-  if(!url){
+  if(!intervals || intervals.length === 0){
     calendarLightboxContent.innerHTML = `
       <article class="calendar-card">
         <h3>Календар Котеджу #${cottageId}</h3>
@@ -1100,7 +1093,7 @@ async function openCalendar(id){
       <div class="legend"><div class="legend-item free"><span></span> Вільно</div><div class="legend-item busy"><span></span> Зайнято</div></div>
     </article>`;
 
-  const busyDates = await getBusyDates(cottageId, url);
+  const busyDates = getBusyDates(cottageId, intervals, version);
   const calendarEl = document.getElementById('calendar');
   const today = new Date();
   today.setHours(0, 0, 0, 0);
