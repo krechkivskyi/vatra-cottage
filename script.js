@@ -962,19 +962,19 @@ const priceInfo = {
   1: {
     title: 'Вартість проживання в Котеджі #1',
     table: [
-      { guests: '6 осіб', price: '3600 грн' },
-      { guests: '5 осіб', price: '3300 грн' },
-      { guests: '4 особи', price: '3000 грн' },
-      { guests: '3 особи', price: '2700 грн' },
-      { guests: '1-2 особи', price: '2400 грн' }
+      { guests: '6 осіб', price: '3300 грн' },
+      { guests: '5 осіб', price: '3000 грн' },
+      { guests: '4 особи', price: '2700 грн' },
+      { guests: '3 особи', price: '2400 грн' },
+      { guests: '1-2 особи', price: '2100 грн' }
     ]
   },
   2: {
     title: 'Вартість проживання в Котеджі #2',
     table: [
-      { guests: '4 особи', price: '3000 грн' },
-      { guests: '3 особи', price: '2700 грн' },
-      { guests: '1-2 особи', price: '2400 грн' }
+      { guests: '4 особи', price: '2700 грн' },
+      { guests: '3 особи', price: '2400 грн' },
+      { guests: '1-2 особи', price: '2100 грн' }
     ]
   },
   notes: [
